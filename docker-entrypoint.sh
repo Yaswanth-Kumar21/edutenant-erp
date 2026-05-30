@@ -1,29 +1,63 @@
 #!/bin/bash
 set -e
 
-# Copy .env if not exists
+cd /var/www/html
+
+# Create .env from example if not exists
 if [ ! -f .env ]; then
     cp .env.example .env
 fi
 
-# Generate app key if not set
-if [ -z "$APP_KEY" ]; then
-    php artisan key:generate --force
-else
-    echo "APP_KEY=$APP_KEY" >> .env
-fi
+# Write all environment variables into .env
+# This overwrites any existing values with what Render provides
+cat > .env << EOF
+APP_NAME="${APP_NAME:-EduTenant ERP}"
+APP_ENV="${APP_ENV:-production}"
+APP_KEY="${APP_KEY}"
+APP_DEBUG="${APP_DEBUG:-false}"
+APP_URL="${APP_URL:-http://localhost}"
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=en_US
+APP_MAINTENANCE_DRIVER=file
+BCRYPT_ROUNDS=12
+LOG_CHANNEL=stack
+LOG_STACK=single
+LOG_LEVEL=error
+DB_CONNECTION="${DB_CONNECTION:-mysql}"
+DB_HOST="${DB_HOST:-127.0.0.1}"
+DB_PORT="${DB_PORT:-3306}"
+DB_DATABASE="${DB_DATABASE:-edutenant_erp}"
+DB_USERNAME="${DB_USERNAME:-root}"
+DB_PASSWORD="${DB_PASSWORD}"
+MYSQL_ATTR_SSL_CA="${MYSQL_ATTR_SSL_CA}"
+SESSION_DRIVER=database
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=null
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+CACHE_STORE=database
+MAIL_MAILER=log
+MAIL_FROM_ADDRESS="noreply@edutenant.com"
+MAIL_FROM_NAME="EduTenant ERP"
+VITE_APP_NAME="EduTenant ERP"
+RAZORPAY_KEY="${RAZORPAY_KEY}"
+RAZORPAY_SECRET="${RAZORPAY_SECRET}"
+EOF
 
-# Write all env vars to .env file
-printenv | grep -E "^(APP_|DB_|MAIL_|QUEUE_|CACHE_|SESSION_|FILESYSTEM_|RAZORPAY_)" >> .env
-
-# Run migrations and seed
+# Run migrations
 php artisan migrate --force
+
+# Seed demo data (only if tables are empty)
 php artisan db:seed --force
 
 # Create storage symlink
 php artisan storage:link || true
 
-# Cache config/routes/views
+# Cache for performance
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
