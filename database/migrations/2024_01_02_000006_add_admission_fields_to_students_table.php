@@ -15,20 +15,20 @@ return new class extends Migration
         Schema::table('students', function (Blueprint $table) {
             // Only add columns that don't already exist
             if (!Schema::hasColumn('students', 'blood_group')) {
-                $table->string('blood_group', 5)->nullable()->after('gender');
+                $table->string('blood_group', 5)->nullable();
             }
             if (!Schema::hasColumn('students', 'aadhaar_number')) {
-                $table->string('aadhaar_number', 20)->nullable()->after('blood_group');
+                $table->string('aadhaar_number', 20)->nullable();
             }
             if (!Schema::hasColumn('students', 'previous_institution')) {
-                $table->string('previous_institution', 200)->nullable()->after('marks_12th');
+                $table->string('previous_institution', 200)->nullable();
             }
             if (!Schema::hasColumn('students', 'scholarship_eligible')) {
-                $table->boolean('scholarship_eligible')->default(false)->after('university_reg_number');
+                $table->boolean('scholarship_eligible')->default(false);
             }
             if (!Schema::hasColumn('students', 'admission_step')) {
                 // Track which step of the wizard was last completed (1-4)
-                $table->tinyInteger('admission_step')->default(4)->after('status');
+                $table->tinyInteger('admission_step')->default(4);
             }
         });
     }
