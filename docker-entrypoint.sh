@@ -51,8 +51,8 @@ EOF
 # Run migrations
 php artisan migrate --force
 
-# Seed demo data (only if tables are empty)
-php artisan db:seed --force
+# Seed demo data (only if tables are empty) - skip on failure so app still starts
+php artisan db:seed --force || echo "Seeding failed - app will start without demo data"
 
 # Create storage symlink
 php artisan storage:link || true
