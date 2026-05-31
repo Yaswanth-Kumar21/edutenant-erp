@@ -10,6 +10,7 @@ use App\Services\FeeAssignmentService;
 use App\Services\FeeCollectionService;
 use App\Services\StaffService;
 use App\Services\TenantService;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -37,6 +38,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        //
+        // Force HTTPS in production (Render deployment)
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
