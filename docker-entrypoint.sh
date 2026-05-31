@@ -9,7 +9,6 @@ if [ ! -f .env ]; then
 fi
 
 # Write all environment variables into .env
-# This overwrites any existing values with what Render provides
 cat > .env << EOF
 APP_NAME="${APP_NAME:-EduTenant ERP}"
 APP_ENV="${APP_ENV:-production}"
@@ -24,13 +23,12 @@ BCRYPT_ROUNDS=12
 LOG_CHANNEL=stack
 LOG_STACK=single
 LOG_LEVEL=error
-DB_CONNECTION="${DB_CONNECTION:-mysql}"
+DB_CONNECTION="${DB_CONNECTION:-pgsql}"
 DB_HOST="${DB_HOST:-127.0.0.1}"
-DB_PORT="${DB_PORT:-3306}"
+DB_PORT="${DB_PORT:-5432}"
 DB_DATABASE="${DB_DATABASE:-edutenant_erp}"
 DB_USERNAME="${DB_USERNAME:-root}"
 DB_PASSWORD="${DB_PASSWORD}"
-MYSQL_ATTR_SSL_CA="${MYSQL_ATTR_SSL_CA}"
 SESSION_DRIVER=database
 SESSION_LIFETIME=120
 SESSION_ENCRYPT=false
@@ -49,10 +47,20 @@ RAZORPAY_SECRET="${RAZORPAY_SECRET}"
 EOF
 
 # Run migrations
+echo "Running migrations..."
 php artisan migrate --force
 
-# Seed demo data (only if tables are empty) - skip on failure so app still starts
-php artisan db:seed --force || echo "Seeding failed - app will start without demo data"
+# Seed only if roles table is empty (first deploy)
+echo "Checking if seeding is needed..."
+ROLE_COUNT=$(php artisan tinker --execute="echo \App\Models\Role::count();" 2>/dev/null | tail -1 | tr -d '[:space:]')
+echo "Role count: $ROLE_COUNT"
+
+if [ "$ROLE_COUNT" = "0" ] || [ -z "$ROLE_COUNT" ]; then
+    echo "Seeding demo data..."
+    php artisan db:seed --force && echo "Seeding complete!" || echo "Seeding failed - continuing anyway"
+else
+    echo "Data already exists, skipping seed."
+fi
 
 # Create storage symlink
 php artisan storage:link || true
