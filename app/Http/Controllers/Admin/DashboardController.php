@@ -171,12 +171,12 @@ class DashboardController extends Controller
         $monthlyAttendance = StudentAttendance::where('tenant_id', $tenantId)
             ->where('attendance_date', '>=', now()->subMonths(6))
             ->select(
-                DB::raw('MONTH(attendance_date) as month'),
-                DB::raw('YEAR(attendance_date) as year'),
-                DB::raw('SUM(CASE WHEN status="present" THEN 1 ELSE 0 END) as present_count'),
+                DB::raw("EXTRACT(MONTH FROM attendance_date) as month"),
+                DB::raw("EXTRACT(YEAR FROM attendance_date) as year"),
+                DB::raw("SUM(CASE WHEN status='present' THEN 1 ELSE 0 END) as present_count"),
                 DB::raw('COUNT(*) as total_count')
             )
-            ->groupBy(DB::raw('YEAR(attendance_date)'), DB::raw('MONTH(attendance_date)'))
+            ->groupBy(DB::raw("EXTRACT(YEAR FROM attendance_date)"), DB::raw("EXTRACT(MONTH FROM attendance_date)"))
             ->orderBy('year')->orderBy('month')
             ->get();
 
@@ -212,11 +212,11 @@ class DashboardController extends Controller
         $platformFees = FeePayment::where('status', 'paid')
             ->where('payment_date', '>=', now()->subMonths(6))
             ->select(
-                DB::raw('MONTH(payment_date) as month'),
-                DB::raw('YEAR(payment_date) as year'),
+                DB::raw("EXTRACT(MONTH FROM payment_date) as month"),
+                DB::raw("EXTRACT(YEAR FROM payment_date) as year"),
                 DB::raw('SUM(amount_paid) as total')
             )
-            ->groupBy(DB::raw('YEAR(payment_date)'), DB::raw('MONTH(payment_date)'))
+            ->groupBy(DB::raw("EXTRACT(YEAR FROM payment_date)"), DB::raw("EXTRACT(MONTH FROM payment_date)"))
             ->orderBy('year')->orderBy('month')
             ->get();
 
