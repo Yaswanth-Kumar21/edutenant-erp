@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 @section('title', 'New Student Admission')
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('admin.students.index') }}" style="color:#4f46e5;text-decoration:none;">Students</a></li>
@@ -54,6 +54,7 @@
         <ul class="mb-0 mt-1 ps-3">@foreach($errors->all() as $e)<li style="font-size:.875rem;">{{ $e }}</li>@endforeach</ul>
     </div>
 </div>
+<span id="admission-error-fields" data-fields="{{ json_encode($errors->keys()) }}" class="d-none"></span>
 @endif
 
 {{-- ── Wizard Steps ─────────────────────────────────────────────────────── --}}
@@ -142,27 +143,45 @@
 <div class="card mb-4">
     <div class="card-header"><span class="rounded-circle d-inline-flex align-items-center justify-content-center me-2" style="width:24px;height:24px;background:rgba(5,150,105,.1);font-size:.72rem;font-weight:700;color:#059669;">2</span>Academic Details</div>
     <div class="card-body">
+        @php
+            $branchError = $errors->has('branch_id') ? ' is-invalid' : '';
+            $yearError   = $errors->has('academic_year_id') ? ' is-invalid' : '';
+            // Pre-build branch options HTML to avoid Blade @foreach inside <select> parsing issue
+            $branchOptionsHtml = '';
+            foreach ($branches->groupBy('course.stream.name') as $sName => $sBranches) {
+                $sLabel = e($sName ?? 'Other');
+                $branchOptionsHtml .= "<optgroup label=\"{$sLabel}\">";
+                foreach ($sBranches->groupBy('course.name') as $cName => $cBranches) {
+                    foreach ($cBranches as $b) {
+                        $sel = old('branch_id') == $b->id ? ' selected' : '';
+                        $bName = e($b->name);
+                        $cNameE = e($cName);
+                        $branchOptionsHtml .= "<option value=\"{$b->id}\"{$sel} data-tuition=\"{$b->tuition_fee_student}\">{$bName} ({$cNameE})</option>";
+                    }
+                }
+                $branchOptionsHtml .= '</optgroup>';
+            }
+            // Pre-build academic year options HTML
+            $yearOptionsHtml = '';
+            foreach ($academicYears as $yr) {
+                $sel = (old('academic_year_id') == $yr->id || (!old('academic_year_id') && $yr->is_current)) ? ' selected' : '';
+                $yrName = e($yr->name . ($yr->is_current ? ' (Current)' : ''));
+                $yearOptionsHtml .= "<option value=\"{$yr->id}\"{$sel}>{$yrName}</option>";
+            }
+        @endphp
         <div class="row g-3">
             <div class="col-md-6"><label class="form-label">Branch <span class="text-danger">*</span></label>
-                <select name="branch_id" id="branch_id" class="form-select @error('branch_id') is-invalid @enderror" required>
-                    <option value="">— Select Branch —</option>
-                    @foreach($branches->groupBy('course.stream.name') as $streamName => $streamBranches)
-                    <optgroup label="{{ $streamName ?? 'Other' }}">
-                        @foreach($streamBranches->groupBy('course.name') as $courseName => $courseBranches)
-                        @foreach($courseBranches as $branch)
-                        <option value="{{ $branch->id }}" {{ old('branch_id')==$branch->id?'selected':'' }} data-tuition="{{ $branch->tuition_fee_student }}">
-                            {{ $branch->name }} ({{ $courseName }})
-                        </option>@endforeach@endforeach
-                    </optgroup>@endforeach
-                </select>@error('branch_id')<div class="invalid-feedback">{{ $message }}</div>@enderror</div>
+                <select name="branch_id" id="branch_id" class="form-select{{ $branchError }}" required>
+                    <option value="">-- Select Branch --</option>
+                    {!! $branchOptionsHtml !!}
+                </select>
+                @error('branch_id')<div class="invalid-feedback">{{ $message }}</div>@enderror</div>
             <div class="col-md-6"><label class="form-label">Academic Year <span class="text-danger">*</span></label>
-                <select name="academic_year_id" class="form-select @error('academic_year_id') is-invalid @enderror" required>
-                    <option value="">— Select Year —</option>
-                    @foreach($academicYears as $year)
-                    <option value="{{ $year->id }}" {{ (old('academic_year_id')==$year->id||(!old('academic_year_id')&&$year->is_current))?'selected':'' }}>
-                        {{ $year->name }}{{ $year->is_current?' (Current)':'' }}
-                    </option>@endforeach
-                </select>@error('academic_year_id')<div class="invalid-feedback">{{ $message }}</div>@enderror</div>
+                <select name="academic_year_id" class="form-select{{ $yearError }}" required>
+                    <option value="">-- Select Year --</option>
+                    {!! $yearOptionsHtml !!}
+                </select>
+                @error('academic_year_id')<div class="invalid-feedback">{{ $message }}</div>@enderror</div>
             <div class="col-md-4"><label class="form-label">10th Marks (%)</label>
                 <input type="number" name="marks_10th" class="form-control" value="{{ old('marks_10th') }}" placeholder="0.00" min="0" max="100" step="0.01"></div>
             <div class="col-md-4"><label class="form-label">12th Marks (%)</label>
@@ -302,7 +321,7 @@
                     <div class="col-md-6">
                         <label class="form-label">Scholarship Type <span class="text-danger">*</span></label>
                         <select name="govt_scholarship_type" class="form-select @error('govt_scholarship_type') is-invalid @enderror">
-                            <option value="">— Select Type —</option>
+                            <option value="">-- Select Type --</option>
                             @foreach(\App\Models\StudentScholarship::GOVT_TYPES as $key=>$label)
                             <option value="{{ $key }}" {{ old('govt_scholarship_type')===$key?'selected':'' }}>{{ $label }}</option>@endforeach
                         </select>@error('govt_scholarship_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
@@ -451,7 +470,7 @@
         <div class="cert-upload-zone" id="cert-drop-zone" onclick="document.getElementById('cert-files-input').click()">
             <i class="fa-solid fa-cloud-arrow-up" style="font-size:2rem;color:#4f46e5;opacity:.6;"></i>
             <div class="mt-2" style="font-weight:500;color:var(--text);">Click to upload or drag &amp; drop</div>
-            <div style="font-size:.8rem;color:var(--muted);margin-top:.25rem;">JPG, PNG, PDF — up to 5MB each</div>
+            <div style="font-size:.8rem;color:var(--muted);margin-top:.25rem;">JPG, PNG, PDF -- up to 5MB each</div>
         </div>
         <input type="file" id="cert-files-input" name="certificates[]" accept=".jpg,.jpeg,.png,.pdf" multiple class="d-none" onchange="handleCertFiles(this.files)">
         <div id="cert-type-inputs"></div>
@@ -531,7 +550,6 @@
 
 @push('scripts')
 <script>
-(function(){
 'use strict';
 const TOTAL = 7;
 let currentStep = 1;
@@ -703,18 +721,24 @@ document.getElementById('admission-form').addEventListener('submit',function(){
 });
 
 /* ── Jump to error step on validation failure ──────────────────────── */
-@if($errors->any())
-const errorFields=@json($errors->keys());
-const stepFields={1:['first_name','last_name','gender','phone','email','date_of_birth','blood_group','aadhaar_number','address','city','state','pincode','photo'],
-2:['branch_id','academic_year_id','marks_10th','marks_12th','previous_institution','current_semester'],
-3:['category','admission_date','vehicle_opted','vehicle_start_date'],
-4:['father_name','father_occupation','father_phone','mother_name','annual_income'],
-5:['govt_scholarship_type','college_scholarship_name','govt_scholarship_amount','college_scholarship_amount']};
-let targetStep=7;
-for(let s=1;s<=5;s++){if(errorFields.some(f=>stepFields[s]?.includes(f))){targetStep=s;break;}}
-goToStep(targetStep);
-@endif
-
-})();
+const errorMeta = document.getElementById('admission-error-fields');
+if (errorMeta) {
+    const errorFields = JSON.parse(errorMeta.dataset.fields || '[]');
+    const stepFields = {
+        1: ['first_name','last_name','gender','phone','email','date_of_birth','blood_group','aadhaar_number','address','city','state','pincode','photo'],
+        2: ['branch_id','academic_year_id','marks_10th','marks_12th','previous_institution','current_semester'],
+        3: ['category','admission_date','vehicle_opted','vehicle_start_date'],
+        4: ['father_name','father_occupation','father_phone','mother_name','annual_income'],
+        5: ['govt_scholarship_type','college_scholarship_name','govt_scholarship_amount','college_scholarship_amount']
+    };
+    let targetStep = 7;
+    for (let s = 1; s <= 5; s++) {
+        if (errorFields.some(function(f){ return (stepFields[s] || []).indexOf(f) !== -1; })) {
+            targetStep = s;
+            break;
+        }
+    }
+    goToStep(targetStep);
+}
 </script>
 @endpush

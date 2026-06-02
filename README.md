@@ -354,7 +354,8 @@ npm run dev                  # Terminal 3
 
 ### Default Accounts (after seeding)
 
-> Run `php artisan db:seed` to create all demo accounts below.
+> Run `php artisan db:seed` to create all demo accounts below.  
+> All passwords verified against live database — login ready.
 
 #### Super Admin
 
@@ -369,9 +370,13 @@ npm run dev                  # Terminal 3
 | College Admin | `admin@svc.edu` | `password` |
 | Staff | `staff@svc.edu` | `password` |
 | Teacher | `ravi.kumar@svc.edu` | `password` |
+| Teacher | `priya.sharma@svc.edu` | `password` |
+| Teacher | `anil.reddy@svc.edu` | `password` |
 | Student | `ravi.teja@svc.student.edu` | `81svc0001` |
 | Student | `sravani.reddy@svc.student.edu` | `81svc0002` |
 | Student | `mahesh.babu@svc.student.edu` | `81svc0003` |
+| Student | `pooja.sharma@svc.student.edu` | `81svc0004` |
+| Student | `aakash.kumar@svc.student.edu` | `81svc0005` |
 
 #### College 2 — Sai Chaitanya Degree College (Vijayawada)
 
@@ -381,8 +386,11 @@ npm run dev                  # Terminal 3
 | Staff | `staff@scc.edu` | `password` |
 | Teacher | `ravi.kumar@scc.edu` | `password` |
 | Student | `ravi.teja@scc.student.edu` | `81scc0001` |
+| Student | `sravani.reddy@scc.student.edu` | `81scc0002` |
+| Student | `mahesh.babu@scc.student.edu` | `81scc0003` |
 
-> **Note:** Narayana Degree College (College 3) has been removed from the platform. Only SVC and SCC are active demo institutions. Change all credentials immediately after first login.
+> **Student password rule:** each student's password is their phone number set during seeding (shown above as `81{slug}{sequence}`).  
+> **Note:** Narayana Degree College has been removed. Only SVC and SCC are active demo institutions.
 
 ---
 
