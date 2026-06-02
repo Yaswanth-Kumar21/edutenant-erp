@@ -64,24 +64,29 @@
 @endif
 
 @if($creds && $creds['tenant_id'] == $tenant->id)
-{{-- ── Creation summary banner ─────────────────────────────────────────── --}}
-<div class="d-flex flex-wrap gap-2 mb-3 p-3 rounded" style="background:var(--surface2);border:1px solid var(--border);font-size:13px;">
-    <span style="font-weight:700;color:var(--muted);margin-right:4px;">Creation Status:</span>
+{{-- ── Creation status banner ──────────────────────────────────────────── --}}
+<div class="d-flex flex-wrap align-items-center gap-3 mb-3 p-3 rounded"
+     style="background:var(--surface2);border:1px solid var(--border);font-size:13px;">
+    <span style="font-weight:700;color:var(--muted);">Creation Status:</span>
     <span style="color:var(--green);"><i class="fa-solid fa-circle-check me-1"></i>✓ Institution Created</span>
     <span style="color:var(--muted);">·</span>
     <span style="color:var(--green);"><i class="fa-solid fa-circle-check me-1"></i>✓ College Admin Created</span>
     <span style="color:var(--muted);">·</span>
     @if($creds['email_sent'])
-        <span style="color:var(--green);"><i class="fa-solid fa-circle-check me-1"></i>✓ Email Sent Successfully</span>
+        <span style="color:var(--green);">
+            <i class="fa-solid fa-circle-check me-1"></i>
+            ✓ Email Sent to <strong>{{ $creds['recipient_email'] ?? $creds['admin_email'] }}</strong>
+        </span>
     @else
-        <span style="color:var(--red);"><i class="fa-solid fa-circle-xmark me-1"></i>❌ Email Failed —
-            @php
-                $latestLog = \App\Models\EmailLog::where('tenant_id', $tenant->id)->where('status','failed')->latest()->first();
-            @endphp
+        <span style="color:var(--red);">
+            <i class="fa-solid fa-circle-xmark me-1"></i>❌ Email Failed —
+            @php $latestLog = \App\Models\EmailLog::where('tenant_id',$tenant->id)->where('status','failed')->latest()->first(); @endphp
             {{ $latestLog?->error_message ? Str::limit($latestLog->error_message, 80) : 'Check SMTP config' }}
         </span>
     @endif
 </div>
+
+{{-- ── Credentials Panel ────────────────────────────────────────────────── --}}
 <div class="card mb-4" style="border:2px solid rgba(37,99,235,.3);background:linear-gradient(135deg,rgba(37,99,235,.04),rgba(79,70,229,.04));" id="credentialsPanel">
     <div class="card-header" style="background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(79,70,229,.08));border-bottom:1px solid rgba(37,99,235,.15);">
         <div class="d-flex align-items-center gap-2">
@@ -96,44 +101,48 @@
         <span class="badge badge-active"><i class="fa-solid fa-circle-check me-1"></i>Admin Provisioned</span>
     </div>
     <div class="card-body">
-        {{-- Warning --}}
+
         <div class="d-flex align-items-start gap-3 p-3 rounded mb-4"
              style="background:rgba(217,119,6,.08);border:1px solid rgba(217,119,6,.25);">
             <i class="fa-solid fa-triangle-exclamation mt-1 flex-shrink-0" style="color:var(--orange);"></i>
             <div style="font-size:13px;color:#92400E;">
-                <strong>Save these credentials now.</strong> The temporary password will not be shown again after you leave this page.
-                The College Admin will be required to change their password on first login.
+                <strong>Save these credentials now.</strong> The temporary password will not be shown again.
+                The College Admin must change their password on first login.
             </div>
         </div>
 
         <div class="row g-3 mb-4">
-            {{-- Credential Cards --}}
+            {{-- Login Email --}}
             <div class="col-md-6">
                 <div class="p-3 rounded" style="background:var(--surface2);border:1px solid var(--border);">
-                    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;">Login Email</div>
-                    <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">Admin uses this to sign in at /login</div>
+                    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px;">Login Email</div>
+                    <div style="font-size:10px;color:var(--muted);margin-bottom:8px;">Admin types this at /login to sign in</div>
                     <div class="d-flex align-items-center gap-2">
-                        <code style="font-size:13px;flex:1;background:var(--surface);padding:8px 12px;border-radius:6px;border:1px solid var(--border);">{{ $creds['admin_email'] }}</code>
+                        <code style="font-size:13px;flex:1;background:var(--surface);padding:8px 12px;border-radius:6px;border:1px solid var(--border);word-break:break-all;">{{ $creds['admin_email'] }}</code>
                         <button class="btn-icon" onclick="copyText('{{ $creds['admin_email'] }}', this)" title="Copy">
                             <i class="fa-solid fa-copy" style="font-size:12px;"></i>
                         </button>
                     </div>
                 </div>
             </div>
+
+            {{-- Credentials Delivered To --}}
             <div class="col-md-6">
-                <div class="p-3 rounded" style="background:rgba(37,99,235,.04);border:2px solid rgba(37,99,235,.2);">
-                    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:8px;">
-                        <i class="fa-solid fa-envelope me-1"></i>Email Delivered To
+                <div class="p-3 rounded" style="background:rgba(37,99,235,.05);border:2px solid rgba(37,99,235,.25);">
+                    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:4px;">
+                        <i class="fa-solid fa-envelope-circle-check me-1"></i>Credentials Delivered To
                     </div>
-                    <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">Principal's real inbox — where credentials were sent</div>
+                    <div style="font-size:10px;color:var(--muted);margin-bottom:8px;">Welcome email was sent to this Principal Email inbox</div>
                     <div class="d-flex align-items-center gap-2">
-                        <code style="font-size:13px;flex:1;background:var(--surface);padding:8px 12px;border-radius:6px;border:1px solid rgba(37,99,235,.2);">{{ $creds['recipient_email'] ?? $creds['admin_email'] }}</code>
+                        <code style="font-size:13px;flex:1;background:var(--surface);padding:8px 12px;border-radius:6px;border:1px solid rgba(37,99,235,.2);color:var(--blue);font-weight:700;word-break:break-all;">{{ $creds['recipient_email'] ?? $creds['admin_email'] }}</code>
                         <button class="btn-icon" onclick="copyText('{{ $creds['recipient_email'] ?? $creds['admin_email'] }}', this)" title="Copy">
                             <i class="fa-solid fa-copy" style="font-size:12px;"></i>
                         </button>
                     </div>
                 </div>
             </div>
+
+            {{-- Temporary Password --}}
             <div class="col-md-6">
                 <div class="p-3 rounded" style="background:var(--surface2);border:1px solid var(--border);">
                     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;">Temporary Password</div>
@@ -145,35 +154,29 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Email Delivery Status --}}
             <div class="col-md-6">
                 <div class="p-3 rounded" style="background:var(--surface2);border:1px solid var(--border);">
                     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;">Email Delivery Status</div>
                     <div style="padding:4px 0;">
                         @if($creds['email_sent'])
                             <span class="badge badge-active" style="font-size:12px;padding:6px 10px;">
-                                <i class="fa-solid fa-envelope-circle-check me-1"></i>✓ Delivered to inbox
+                                <i class="fa-solid fa-envelope-circle-check me-1"></i>✓ Delivered to Principal Inbox
                             </span>
                             <div style="font-size:11px;color:var(--muted);margin-top:6px;">
-                                Log #{{ $creds['email_log_id'] ?? '—' }} · Check Delivery Verification below
+                                Log #{{ $creds['email_log_id'] ?? '—' }} · See Delivery Verification below
                             </div>
                         @else
                             <span style="background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.25);border-radius:6px;padding:5px 10px;font-size:12px;font-weight:700;display:inline-block;">
                                 <i class="fa-solid fa-circle-xmark me-1"></i>❌ Delivery Failed
                             </span>
-                            <div style="font-size:11px;color:var(--red);margin-top:6px;">
-                                @php
-                                    $lastFailedLog = \App\Models\EmailLog::where('tenant_id', $tenant->id)
-                                        ->where('status', 'failed')->latest()->first();
-                                @endphp
-                                @if($lastFailedLog?->error_message)
-                                    {{ Str::limit($lastFailedLog->error_message, 100) }}
-                                @else
-                                    See Delivery Verification section below.
-                                @endif
-                            </div>
-                            <a href="/debug-email?to={{ urlencode($creds['recipient_email'] ?? $creds['admin_email']) }}"
-                               target="_blank" style="font-size:11px;color:var(--blue);display:inline-block;margin-top:4px;">
-                                <i class="fa-solid fa-stethoscope me-1"></i>Run SMTP diagnostic →
+                            @php $lastFailedLog = \App\Models\EmailLog::where('tenant_id',$tenant->id)->where('status','failed')->latest()->first(); @endphp
+                            @if($lastFailedLog?->error_message)
+                            <div style="font-size:11px;color:var(--red);margin-top:6px;">{{ Str::limit($lastFailedLog->error_message, 100) }}</div>
+                            @endif
+                            <a href="/debug-email-delivery" target="_blank" style="font-size:11px;color:var(--blue);display:inline-block;margin-top:4px;">
+                                <i class="fa-solid fa-stethoscope me-1"></i>Run SMTP Diagnostic →
                             </a>
                         @endif
                     </div>
@@ -181,7 +184,6 @@
             </div>
         </div>
 
-        {{-- Action Buttons --}}
         <div class="d-flex flex-wrap gap-2">
             <button class="btn-primary" onclick="copyAllCredentials()">
                 <i class="fa-solid fa-clipboard"></i> Copy All Credentials
@@ -189,7 +191,7 @@
             <form method="POST" action="{{ route('super.tenants.resend-credentials', $tenant) }}" style="display:inline;">
                 @csrf
                 <button type="submit" class="btn-secondary">
-                    <i class="fa-solid fa-paper-plane"></i> Send Email Again
+                    <i class="fa-solid fa-paper-plane"></i> Resend Email
                 </button>
             </form>
             <form method="POST" action="{{ route('super.tenants.impersonate', $tenant) }}" style="display:inline;">
@@ -561,28 +563,60 @@ function copyText(text, btn) {
         const icon = btn.querySelector('i');
         icon.className = 'fa-solid fa-check';
         icon.style.color = 'var(--green)';
-        setTimeout(() => {
-            icon.className = 'fa-solid fa-copy';
-            icon.style.color = '';
-        }, 2000);
+        setTimeout(() => { icon.className = 'fa-solid fa-copy'; icon.style.color = ''; }, 2000);
     });
 }
 
 function copyAllCredentials() {
     @if($creds && $creds['tenant_id'] == $tenant->id)
     const text = `EduTenant ERP — College Admin Credentials
-Institution  : {{ $tenant->name }}
-Login Email  : {{ $creds['admin_email'] ?? '' }}
-Delivered To : {{ $creds['recipient_email'] ?? $creds['admin_email'] ?? '' }}
-Temp Password: {{ $creds['temporary_password'] ?? '' }}
-Login URL    : {{ url('/login') }}
+Institution   : {{ $tenant->name }}
+Login Email   : {{ $creds['admin_email'] ?? '' }}
+Delivered To  : {{ $creds['recipient_email'] ?? $creds['admin_email'] ?? '' }}
+Temp Password : {{ $creds['temporary_password'] ?? '' }}
+Login URL     : {{ url('/login') }}
 
-Note: Password must be changed on first login.
-Note: Use "Login Email" to sign in. "Delivered To" is where the email was sent.`;
+IMPORTANT: Admin must change password on first login.
+Use "Login Email" to sign in at /login.
+"Delivered To" is the inbox that received the welcome email.`;
     navigator.clipboard.writeText(text).then(() => {
-        Swal.fire({ icon: 'success', title: 'Copied!', text: 'Credentials copied to clipboard.', timer: 2000, showConfirmButton: false, toast: true, position: 'top-end' });
+        Swal.fire({ icon:'success', title:'Copied!', text:'Credentials copied to clipboard.',
+            timer:2000, showConfirmButton:false, toast:true, position:'top-end' });
     });
     @endif
 }
+
+// ── Auto-fire success toast on page load when email was just sent ────────────
+@if($creds && $creds['tenant_id'] == $tenant->id && $creds['email_sent'])
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Welcome email sent!',
+            html: 'Credentials delivered to:<br><strong style="font-size:15px;color:#059669;">{{ $creds['recipient_email'] ?? $creds['admin_email'] }}</strong>',
+            timer: 6000,
+            timerProgressBar: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Got it',
+            confirmButtonColor: '#2563EB',
+            toast: false,
+            position: 'center',
+        });
+    }, 600);
+});
+@elseif($creds && $creds['tenant_id'] == $tenant->id && !$creds['email_sent'])
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Institution created — email failed',
+            html: 'Credentials were generated but the welcome email could not be delivered.<br><br>' +
+                  'Use <strong>Resend Email</strong> below or check the <strong>Delivery Verification</strong> section.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#dc2626',
+        });
+    }, 600);
+});
+@endif
 </script>
 @endpush
