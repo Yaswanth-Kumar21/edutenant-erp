@@ -340,6 +340,24 @@
     @include('layouts.sidebar')
     <div id="main-content">
         @include('layouts.topnav')
+
+        {{-- Impersonation Banner --}}
+        @if(session('impersonating'))
+        <div style="background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;font-weight:500;">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-user-secret" style="font-size:16px;"></i>
+                <span>You are currently <strong>impersonating</strong> {{ auth()->user()->name }} ({{ auth()->user()->tenant?->name }}). All actions are being audited.</span>
+            </div>
+            <form method="POST" action="{{ route('super.stop-impersonating') }}" style="flex-shrink:0;">
+                @csrf
+                <button type="submit" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:6px;cursor:pointer;transition:all .15s;"
+                        onmouseover="this.style.background='rgba(255,255,255,.3)'" onmouseout="this.style.background='rgba(255,255,255,.2)'">
+                    <i class="fa-solid fa-right-from-bracket me-1"></i> Stop Impersonating
+                </button>
+            </form>
+        </div>
+        @endif
+
         <div class="page-content fade-in-up">
             @yield('content')
         </div>

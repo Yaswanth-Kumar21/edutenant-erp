@@ -34,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(StaffService::class);
         $this->app->singleton(DashboardService::class);
         $this->app->singleton(TenantService::class);
+
+        // Onboarding & provisioning services
+        $this->app->singleton(\App\Services\CollegeAdminProvisioningService::class);
+        $this->app->singleton(\App\Services\MailLogService::class);
     }
 
     public function boot(): void

@@ -190,5 +190,68 @@
     </div>
 </div>
 
+{{-- ── Scholarship & Transport (Student View) ─────────────────────────── --}}
+@if($student->scholarships->isNotEmpty() || $student->vehicle_opted)
+<div class="row g-3 mt-1">
+    @if($student->scholarships->isNotEmpty())
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-award me-2" style="color:#059669;"></i>My Scholarships
+            </div>
+            <div class="card-body p-0">
+                @foreach($student->scholarships as $sch)
+                <div class="d-flex align-items-center justify-content-between px-4 py-3"
+                     style="border-bottom:1px solid var(--border);">
+                    <div>
+                        <div style="font-size:.85rem;font-weight:600;">{{ $sch->display_name }}</div>
+                        <div style="font-size:.72rem;color:var(--muted);">
+                            {{ ucfirst($sch->scholarship_category) }} &bull; {{ $sch->semesters_label }}
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div style="font-weight:700;color:#059669;">₹{{ number_format($sch->amount) }}</div>
+                        <span class="badge" style="background:{{ $sch->status==='active'?'#dcfce7':'#fee2e2' }};color:{{ $sch->status==='active'?'#166534':'#991b1b' }};font-size:.68rem;">
+                            {{ ucfirst($sch->status) }}
+                        </span>
+                    </div>
+                </div>
+                @endforeach
+                <div class="d-flex justify-content-between px-4 py-3" style="background:var(--bg);">
+                    <span style="font-size:.82rem;font-weight:600;">Total</span>
+                    <span style="font-weight:700;color:#059669;">₹{{ number_format($student->scholarships->sum('amount')) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if($student->vehicle_opted && $student->transport)
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-bus me-2" style="color:#0891b2;"></i>My Transport
+            </div>
+            <div class="card-body p-0">
+                @php $tr = $student->transport; @endphp
+                @foreach([
+                    ['Route',          $tr->route ?? '—'],
+                    ['Boarding Point', $tr->boarding_point ?? '—'],
+                    ['Fee',            $tr->transport_fee ? '₹'.number_format($tr->transport_fee).'/semester' : '—'],
+                    ['Semesters',      $tr->semesters_label],
+                ] as [$lbl, $val])
+                <div class="d-flex justify-content-between px-4 py-3"
+                     style="border-bottom:1px solid var(--border);">
+                    <span style="font-size:.82rem;color:var(--muted);">{{ $lbl }}</span>
+                    <span style="font-size:.85rem;font-weight:600;">{{ $val }}</span>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    @endif
+</div>
+@endif
+
 @endsection
 

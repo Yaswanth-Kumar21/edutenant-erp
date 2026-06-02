@@ -17,9 +17,16 @@ class RegisteredUserController extends Controller
 {
     /**
      * Display the registration view.
+     * Disabled in production — all users are provisioned via Super Admin.
      */
     public function create(): View
     {
+        abort_if(
+            config('app.env') === 'production',
+            403,
+            'Public registration is disabled. Contact your system administrator.'
+        );
+
         return view('auth.register');
     }
 
@@ -30,6 +37,11 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        abort_if(
+            config('app.env') === 'production',
+            403,
+            'Public registration is disabled.'
+        );
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],

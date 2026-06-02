@@ -71,13 +71,16 @@ class FeeDashboardController extends Controller
             'academicYear',
             'feePayments' => fn($q) => $q->with('feeType')->latest('payment_date'),
             'guardian',
+            'scholarships',
+            'transport',
         ]);
 
         $feeSummary      = $this->analytics->getStudentFeeSummary($student);
         $pendingPayments = $student->feePayments->whereIn('status', ['pending', 'partial']);
+        $totalScholarship = $student->scholarships->sum('amount');
 
         return view('admin.fees.student-profile', compact(
-            'student', 'feeSummary', 'pendingPayments'
+            'student', 'feeSummary', 'pendingPayments', 'totalScholarship'
         ));
     }
 }

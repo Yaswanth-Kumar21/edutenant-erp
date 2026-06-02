@@ -99,9 +99,21 @@
             </div>
 
             <a href="{{ route('admin.students.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.students*') ? 'active' : '' }}">
+               class="sidebar-link {{ request()->routeIs('admin.students.index') || request()->routeIs('admin.students.show') || request()->routeIs('admin.students.edit') ? 'active' : '' }}">
                 <i class="fa-solid fa-user-graduate sidebar-icon"></i>
                 <span class="sidebar-label">Students</span>
+            </a>
+
+            <a href="{{ route('admin.students.360.search') }}"
+               class="sidebar-link {{ request()->routeIs('admin.students.360*') ? 'active' : '' }}">
+                <i class="fa-solid fa-circle-nodes sidebar-icon"></i>
+                <span class="sidebar-label">Student 360°</span>
+            </a>
+
+            <a href="{{ route('admin.scholarships.index') }}"
+               class="sidebar-link {{ request()->routeIs('admin.scholarships*') ? 'active' : '' }}">
+                <i class="fa-solid fa-award sidebar-icon"></i>
+                <span class="sidebar-label">Scholarships</span>
             </a>
 
             <a href="{{ route('admin.admissions.create') }}"
@@ -212,8 +224,11 @@
             <a href="{{ route('admin.admissions.create') }}" class="sidebar-link {{ request()->routeIs('admin.admissions*') ? 'active' : '' }}">
                 <i class="fa-solid fa-user-plus sidebar-icon"></i><span class="sidebar-label">New Admission</span>
             </a>
-            <a href="{{ route('admin.students.index') }}" class="sidebar-link {{ request()->routeIs('admin.students*') ? 'active' : '' }}">
+            <a href="{{ route('admin.students.index') }}" class="sidebar-link {{ request()->routeIs('admin.students.index') ? 'active' : '' }}">
                 <i class="fa-solid fa-user-graduate sidebar-icon"></i><span class="sidebar-label">Students</span>
+            </a>
+            <a href="{{ route('admin.students.360.search') }}" class="sidebar-link {{ request()->routeIs('admin.students.360*') ? 'active' : '' }}">
+                <i class="fa-solid fa-circle-nodes sidebar-icon"></i><span class="sidebar-label">Student 360°</span>
             </a>
 
             <div class="sidebar-section mt-1">Fees</div>
@@ -253,8 +268,11 @@
             </a>
 
             <div class="sidebar-section mt-1">Classroom</div>
-            <a href="{{ route('admin.students.index') }}" class="sidebar-link {{ request()->routeIs('admin.students*') ? 'active' : '' }}">
+            <a href="{{ route('admin.students.index') }}" class="sidebar-link {{ request()->routeIs('admin.students.index') ? 'active' : '' }}">
                 <i class="fa-solid fa-user-graduate sidebar-icon"></i><span class="sidebar-label">My Students</span>
+            </a>
+            <a href="{{ route('admin.students.360.search') }}" class="sidebar-link {{ request()->routeIs('admin.students.360*') ? 'active' : '' }}">
+                <i class="fa-solid fa-circle-nodes sidebar-icon"></i><span class="sidebar-label">Student 360°</span>
             </a>
             <a href="{{ route('admin.attendance.students') }}" class="sidebar-link {{ request()->routeIs('admin.attendance.students') && !request()->routeIs('admin.attendance.students.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-calendar-check sidebar-icon"></i><span class="sidebar-label">Mark Attendance</span>

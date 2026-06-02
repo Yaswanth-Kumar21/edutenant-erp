@@ -68,6 +68,8 @@ class PdfController extends Controller
             'feePayments.feeType',
             'attendance',
             'certificates',
+            'scholarships',
+            'transport',
         ]);
         $tenant = $this->tenant();
 
@@ -77,11 +79,13 @@ class PdfController extends Controller
         $presentDays     = $student->attendance->where('status', 'present')->count();
         $absentDays      = $student->attendance->where('status', 'absent')->count();
         $totalDays       = $student->attendance->count();
+        $totalScholarship = $student->scholarships->sum('amount');
 
         $pdf = Pdf::loadView('pdf.student-report', compact(
             'student', 'tenant',
             'totalPaid', 'totalDue',
-            'attendancePct', 'presentDays', 'absentDays', 'totalDays'
+            'attendancePct', 'presentDays', 'absentDays', 'totalDays',
+            'totalScholarship'
         ))->setPaper('a4', 'portrait');
 
         return $pdf->download("student-report-{$student->admission_number}.pdf");

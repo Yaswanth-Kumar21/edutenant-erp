@@ -47,8 +47,9 @@
                             @error('status')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Email Address</label>
+                            <label class="form-label">Institution Contact Email</label>
                             <input type="email" name="email" class="form-control" value="{{ old('email',$tenant->email) }}">
+                            <div class="form-hint">General college contact email</div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Phone Number</label>
@@ -57,6 +58,17 @@
                         <div class="col-md-6">
                             <label class="form-label">Principal Name</label>
                             <input type="text" name="principal_name" class="form-control" value="{{ old('principal_name',$tenant->principal_name) }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Principal Email
+                                <span class="badge ms-1" style="background:rgba(37,99,235,.1);color:var(--blue);font-size:10px;">Admin Login</span>
+                            </label>
+                            <input type="email" name="principal_email" class="form-control @error('principal_email') is-invalid @enderror"
+                                   value="{{ old('principal_email',$tenant->principal_email) }}"
+                                   placeholder="principal@gmail.com">
+                            <div class="form-hint" style="color:var(--blue);">Used as College Admin login email</div>
+                            @error('principal_email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Affiliation Number</label>

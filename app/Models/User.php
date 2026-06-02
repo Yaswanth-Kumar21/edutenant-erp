@@ -16,6 +16,7 @@ class User extends Authenticatable
     protected $fillable = [
         'tenant_id', 'role_id', 'name', 'email', 'phone',
         'avatar', 'password', 'status', 'is_super_admin',
+        'must_change_password', 'password_changed_at', 'is_impersonating',
     ];
 
     protected $hidden = [
@@ -23,9 +24,12 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password'          => 'hashed',
-        'is_super_admin'    => 'boolean',
+        'email_verified_at'    => 'datetime',
+        'password'             => 'hashed',
+        'is_super_admin'       => 'boolean',
+        'must_change_password' => 'boolean',
+        'is_impersonating'     => 'boolean',
+        'password_changed_at'  => 'datetime',
     ];
 
     // ─── Relationships ────────────────────────────────────────────────────────
@@ -48,6 +52,16 @@ class User extends Authenticatable
     public function staffProfile()
     {
         return $this->hasOne(Staff::class);
+    }
+
+    public function passwordHistories()
+    {
+        return $this->hasMany(PasswordHistory::class)->latest();
+    }
+
+    public function impersonationLogs()
+    {
+        return $this->hasMany(ImpersonationLog::class, 'super_admin_id')->latest('login_time');
     }
 
     // ─── Role Helpers ─────────────────────────────────────────────────────────

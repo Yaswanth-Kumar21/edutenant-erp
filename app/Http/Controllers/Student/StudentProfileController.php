@@ -30,6 +30,9 @@ class StudentProfileController extends Controller
             'academicYear',
             'guardian',
             'profile',
+            'scholarships',
+            'transport',
+            'feePayments.feeType',
         ]);
 
         $tenant = TenantService::getTenant();

@@ -8,6 +8,8 @@ use App\Models\Role;
 use App\Models\Student;
 use App\Models\StudentCertificate;
 use App\Models\StudentProfile;
+use App\Models\StudentScholarship;
+use App\Models\StudentTransport;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -128,7 +130,7 @@ class AdmissionService
                 'current_semester'       => $data['current_semester'] ?? 1,
                 'current_year'           => $data['current_year'] ?? 1,
                 'category'               => $data['category'],
-                'scholarship_eligible'   => (bool) ($data['scholarship_eligible'] ?? false),
+                'scholarship_eligible'   => false, // will be updated after scholarship records are created
                 'vehicle_opted'          => (bool) ($data['vehicle_opted'] ?? false),
                 'vehicle_start_date'     => ($data['vehicle_opted'] ?? false) ? ($data['vehicle_start_date'] ?? null) : null,
                 'status'                 => 'active',
@@ -144,7 +146,7 @@ class AdmissionService
                 'blood_group'            => $data['blood_group'] ?? null,
                 'previous_institution'   => $data['previous_institution'] ?? null,
                 'university_reg_number'  => $data['university_reg_number'] ?? null,
-                'scholarship_applied'    => (bool) ($data['scholarship_eligible'] ?? false),
+                'scholarship_applied'    => !empty($data['govt_scholarship_eligible']) || !empty($data['college_scholarship_eligible']),
                 'hostel_required'        => false,
             ]);
 
@@ -160,9 +162,59 @@ class AdmissionService
                 'mother_occupation'      => $data['mother_occupation'] ?? null,
                 'mother_phone'           => $data['mother_phone'] ?? null,
                 'annual_income'          => $data['annual_income'] ?? null,
-                'scholarship_eligible'   => (bool) ($data['guardian_scholarship_eligible'] ?? false),
-                'scholarship_details'    => $data['scholarship_details'] ?? null,
             ]);
+
+            // ── 4a. Create Government Scholarship ────────────────────────
+            if (!empty($data['govt_scholarship_eligible'])) {
+                $govtSemesters = $data['govt_scholarship_semesters'] ?? [];
+                StudentScholarship::create([
+                    'tenant_id'            => $tenantId,
+                    'student_id'           => $student->id,
+                    'scholarship_category' => 'government',
+                    'scholarship_type'     => $data['govt_scholarship_type'] ?? null,
+                    'scholarship_name'     => StudentScholarship::GOVT_TYPES[$data['govt_scholarship_type'] ?? ''] ?? null,
+                    'amount'               => $data['govt_scholarship_amount'] ?? 0,
+                    'applicable_semesters' => $govtSemesters,
+                    'start_date'           => $data['admission_date'] ?? now()->toDateString(),
+                    'status'               => 'active',
+                ]);
+            }
+
+            // ── 4b. Create College Scholarship ───────────────────────────
+            if (!empty($data['college_scholarship_eligible'])) {
+                $collegeSemesters = $data['college_scholarship_semesters'] ?? [];
+                StudentScholarship::create([
+                    'tenant_id'            => $tenantId,
+                    'student_id'           => $student->id,
+                    'scholarship_category' => 'college',
+                    'scholarship_name'     => $data['college_scholarship_name'] ?? null,
+                    'amount'               => $data['college_scholarship_amount'] ?? 0,
+                    'applicable_semesters' => $collegeSemesters,
+                    'start_date'           => $data['admission_date'] ?? now()->toDateString(),
+                    'status'               => 'active',
+                ]);
+            }
+
+            // ── 4c. Create Transport Record ───────────────────────────────
+            if (!empty($data['vehicle_opted'])) {
+                $transportSemesters = $data['transport_semesters'] ?? [];
+                StudentTransport::create([
+                    'tenant_id'            => $tenantId,
+                    'student_id'           => $student->id,
+                    'route'                => $data['transport_route'] ?? null,
+                    'boarding_point'       => $data['transport_boarding'] ?? null,
+                    'transport_fee'        => $data['transport_fee'] ?? 0,
+                    'applicable_semesters' => $transportSemesters,
+                    'status'               => 'active',
+                    'notes'                => $data['transport_notes'] ?? null,
+                ]);
+            }
+
+            // Update scholarship_eligible flag on student (cached)
+            $hasScholarship = !empty($data['govt_scholarship_eligible']) || !empty($data['college_scholarship_eligible']);
+            if ($hasScholarship) {
+                $student->update(['scholarship_eligible' => true]);
+            }
 
             // ── 4. Store Certificates ─────────────────────────────────────
             $certTypes = $data['certificate_types'] ?? [];

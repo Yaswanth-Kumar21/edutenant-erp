@@ -35,6 +35,12 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('student.dashboard');
         }
 
+        // College Admin: check if forced password change is required
+        if ($user->isCollegeAdmin() && $user->must_change_password) {
+            return redirect()->route('password.change.show')
+                ->with('warning', 'Welcome! Please change your temporary password to continue.');
+        }
+
         // Super admin, college_admin, staff, teacher → admin dashboard
         return redirect()->intended(route('dashboard', absolute: false));
     }

@@ -12,6 +12,9 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+    // ── Registration is disabled in production (users created via Super Admin) ──
+    // These routes are kept for local development / seeding only.
+    // In production, set APP_REGISTRATION_ENABLED=false to block public sign-up.
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 

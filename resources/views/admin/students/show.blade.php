@@ -69,6 +69,11 @@
                    title="Download PDF Report">
                     <i class="fa-solid fa-file-pdf me-1"></i> PDF Report
                 </a>
+                <a href="{{ route('admin.students.360', $student) }}"
+                   class="btn btn-sm"
+                   style="background:rgba(255,255,255,0.25);color:#fff;border:1px solid rgba(255,255,255,0.5);font-weight:600;">
+                    <i class="fa-solid fa-circle-nodes me-1"></i> 360° View
+                </a>
                 <a href="{{ route('admin.admissions.receipt', $student) }}"
                    class="btn btn-sm"
                    style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);">
@@ -249,6 +254,7 @@
                             <span class="badge" style="background:#dcfce7;color:#166534;">
                                 <i class="fa-solid fa-bus me-1"></i>Yes
                             </span>
+                            </span>
                         @else
                             <span style="color:var(--muted);">No</span>
                         @endif
@@ -290,13 +296,9 @@
 
                     <dt class="col-5" style="color:var(--muted);font-weight:500;">Scholarship</dt>
                     <dd class="col-7 mb-0">
-                        @if($student->guardian->scholarship_eligible)
+                        @if($student->scholarship_eligible)
                             <span class="badge" style="background:#dcfce7;color:#166534;">Eligible</span>
-                            @if($student->guardian->scholarship_details)
-                                <div style="font-size:0.78rem;color:var(--muted);margin-top:0.25rem;">
-                                    {{ $student->guardian->scholarship_details }}
-                                </div>
-                            @endif
+                            <a href="{{ route('admin.students.360', $student) }}#scholarships" style="font-size:.78rem;color:#4f46e5;margin-left:.5rem;">View Details →</a>
                         @else
                             <span style="color:var(--muted);">Not Eligible</span>
                         @endif
@@ -454,6 +456,89 @@
         </div>
     </div>
 </div>
+
+{{-- ── Scholarship & Transport Row ─────────────────────────────────────── --}}
+@if($student->scholarships->isNotEmpty() || $student->vehicle_opted)
+<div class="row g-3 mt-0">
+    {{-- Scholarships --}}
+    @if($student->scholarships->isNotEmpty())
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <span><i class="fa-solid fa-award me-2" style="color:#059669;"></i>Scholarships</span>
+                <a href="{{ route('admin.students.360', $student) }}#scholarships"
+                   class="btn btn-sm btn-outline-primary" style="font-size:.75rem;">
+                    <i class="fa-solid fa-circle-nodes me-1"></i>Full Details
+                </a>
+            </div>
+            <div class="card-body p-0">
+                @foreach($student->scholarships as $sch)
+                <div class="d-flex align-items-center justify-content-between px-4 py-3"
+                     style="border-bottom:1px solid var(--border);">
+                    <div>
+                        <div style="font-size:.85rem;font-weight:600;">{{ $sch->display_name }}</div>
+                        <div style="font-size:.72rem;color:var(--muted);">
+                            {{ ucfirst($sch->scholarship_category) }} &bull; {{ $sch->semesters_label }}
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div style="font-weight:700;color:#059669;font-size:.9rem;">₹{{ number_format($sch->amount) }}</div>
+                        <span class="badge" style="background:{{ $sch->status==='active'?'#dcfce7':'#fee2e2' }};color:{{ $sch->status==='active'?'#166534':'#991b1b' }};font-size:.68rem;">
+                            {{ ucfirst($sch->status) }}
+                        </span>
+                    </div>
+                </div>
+                @endforeach
+                <div class="d-flex justify-content-between align-items-center px-4 py-3"
+                     style="background:var(--bg);">
+                    <span style="font-size:.82rem;font-weight:600;">Total Scholarship</span>
+                    <span style="font-weight:700;color:#059669;">₹{{ number_format($student->scholarships->sum('amount')) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    {{-- Transport --}}
+    @if($student->vehicle_opted && $student->transport)
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <span><i class="fa-solid fa-bus me-2" style="color:#0891b2;"></i>Transport Details</span>
+                <span class="badge" style="background:#dcfce7;color:#166534;">Active</span>
+            </div>
+            <div class="card-body p-0">
+                @php $tr = $student->transport; @endphp
+                @foreach([
+                    ['Route',          $tr->route ?? '—'],
+                    ['Boarding Point', $tr->boarding_point ?? '—'],
+                    ['Transport Fee',  $tr->transport_fee ? '₹'.number_format($tr->transport_fee).'/semester' : '—'],
+                    ['Semesters',      $tr->semesters_label],
+                ] as [$lbl, $val])
+                <div class="d-flex align-items-center justify-content-between px-4 py-3"
+                     style="border-bottom:1px solid var(--border);">
+                    <span style="font-size:.82rem;color:var(--muted);">{{ $lbl }}</span>
+                    <span style="font-size:.85rem;font-weight:600;">{{ $val }}</span>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    @elseif($student->vehicle_opted)
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header"><i class="fa-solid fa-bus me-2" style="color:#0891b2;"></i>Transport</div>
+            <div class="card-body">
+                <div class="empty-state py-3">
+                    <i class="fa-solid fa-bus d-block mb-2" style="font-size:1.5rem;opacity:.2;"></i>
+                    <p class="mb-0 small">Transport opted — no route details recorded yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+</div>
+@endif
 
 {{-- ── Certificate Upload Modal ─────────────────────────────────────────── --}}
 <div class="modal fade" id="uploadCertModal" tabindex="-1" aria-labelledby="uploadCertModalLabel" aria-hidden="true">

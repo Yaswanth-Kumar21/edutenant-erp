@@ -26,10 +26,13 @@ class TransportFeeController extends Controller
         $query = Student::where('tenant_id', $tenantId)
             ->where('vehicle_opted', true)
             ->where('status', 'active')
-            ->with(['branch.course', 'feePayments' => fn($q) =>
-                $q->whereHas('feeType', fn($ft) => $ft->where('code', 'VEHICLE'))
-                  ->latest('payment_date')
-                  ->limit(3)
+            ->with([
+                'branch.course',
+                'transport',   // student_transport record with route details
+                'feePayments' => fn($q) =>
+                    $q->whereHas('feeType', fn($ft) => $ft->where('code', 'VEHICLE'))
+                      ->latest('payment_date')
+                      ->limit(3),
             ]);
 
         if ($request->filled('branch_id')) $query->where('branch_id', $request->branch_id);

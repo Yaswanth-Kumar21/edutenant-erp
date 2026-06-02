@@ -126,6 +126,8 @@ class StudentController extends Controller
             'guardian',
             'certificates',
             'admissionReceipts',
+            'scholarships',
+            'transport',
             'user',
         ]);
 
@@ -148,6 +150,8 @@ class StudentController extends Controller
             'guardian',
             'certificates',
             'admissionReceipts',
+            'scholarships',
+            'transport',
             'user',
         ]);
 

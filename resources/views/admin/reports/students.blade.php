@@ -41,7 +41,7 @@
     </div>
     <div class="col-sm-3">
         <div class="card text-center p-3">
-            <div style="font-size:1.75rem;font-weight:800;color:#d97706;">{{ $students->where('scholarship_eligible',true)->count() }}</div>
+            <div style="font-size:1.75rem;font-weight:800;color:#d97706;">{{ $scholarshipCount ?? $students->where('scholarship_eligible',true)->count() }}</div>
             <div style="font-size:.78rem;color:var(--muted);">Scholarship Eligible</div>
         </div>
     </div>
@@ -89,18 +89,18 @@
                                 <img src="{{ $student->photo_url }}" class="rounded-circle" style="width:30px;height:30px;object-fit:cover;">
                                 <div>
                                     <div style="font-weight:500;font-size:.875rem;">{{ $student->full_name }}</div>
-                                    <div style="font-size:.72rem;color:var(--muted);">{{ $student->phone ?? $student->email ?? '—' }}</div>
+                                    <div style="font-size:.72rem;color:var(--muted);">{{ $student->phone ?? $student->email ?? 'ï¿½' }}</div>
                                 </div>
                             </div>
                         </td>
                         <td><span style="font-family:monospace;font-size:.8rem;color:#4f46e5;font-weight:600;">{{ $student->admission_number }}</span></td>
                         <td style="font-size:.82rem;">
-                            <div style="font-weight:500;">{{ $student->branch?->name ?? '—' }}</div>
+                            <div style="font-weight:500;">{{ $student->branch?->name ?? 'ï¿½' }}</div>
                             <div style="font-size:.72rem;color:var(--muted);">{{ $student->branch?->course?->name ?? '' }}</div>
                         </td>
                         <td><span class="badge" style="background:rgba(79,70,229,.1);color:#4f46e5;font-size:.72rem;">{{ $student->category }}</span></td>
                         <td style="font-size:.82rem;">Sem {{ $student->current_semester }}</td>
-                        <td style="font-size:.78rem;color:var(--muted);">{{ $student->admission_date?->format('d M Y') ?? '—' }}</td>
+                        <td style="font-size:.78rem;color:var(--muted);">{{ $student->admission_date?->format('d M Y') ?? 'ï¿½' }}</td>
                         <td>
                             @php $sc = ['active'=>['#dcfce7','#166534'],'inactive'=>['#fee2e2','#991b1b'],'passed_out'=>['#dbeafe','#1e40af'],'dropped'=>['#fef3c7','#92400e']][$student->status] ?? ['#f3f4f6','#374151']; @endphp
                             <span class="badge" style="background:{{ $sc[0] }};color:{{ $sc[1] }};font-size:.72rem;">{{ ucfirst(str_replace('_',' ',$student->status)) }}</span>

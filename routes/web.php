@@ -24,6 +24,12 @@ require __DIR__ . '/auth.php';
 // ── Authenticated Routes ──────────────────────────────────────────────────────
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    // ── Forced Password Change (College Admin first login) ────────────────
+    Route::get('/change-password', [\App\Http\Controllers\Auth\PasswordChangeController::class, 'show'])
+        ->name('password.change.show');
+    Route::post('/change-password', [\App\Http\Controllers\Auth\PasswordChangeController::class, 'update'])
+        ->name('password.change.update');
+
     // ── Dashboard Routes (role-based) ─────────────────────────────────────
     require __DIR__ . '/modules/dashboard.php';
 
@@ -33,7 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // ── Admin Panel — college_admin, staff, teacher only ─────────────────
-    Route::middleware(['tenant', 'role:college_admin,staff,teacher'])
+    Route::middleware(['tenant', 'role:college_admin,staff,teacher', 'force.password.change'])
         ->prefix('admin')
         ->name('admin.')
         ->group(function () {

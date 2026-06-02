@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\FeePayment;
 use App\Models\Student;
+use App\Models\StudentScholarship;
 use App\Services\TenantService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,8 +42,17 @@ class ReportController extends Controller
     public function students(Request $request)
     {
         $tenantId = TenantService::getTenantId();
-        $students = Student::where('tenant_id', $tenantId)->with('branch.course.stream')->paginate(50);
-        return view('admin.reports.students', compact('students'));
+        $students = Student::where('tenant_id', $tenantId)
+            ->with(['branch.course.stream', 'scholarships'])
+            ->paginate(50);
+
+        // Scholarship stats from the new table
+        $scholarshipCount = \App\Models\StudentScholarship::where('tenant_id', $tenantId)
+            ->where('status', 'active')
+            ->distinct('student_id')
+            ->count('student_id');
+
+        return view('admin.reports.students', compact('students', 'scholarshipCount'));
     }
 
     public function fees(Request $request)

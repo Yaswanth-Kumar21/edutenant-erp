@@ -84,6 +84,21 @@ class Student extends Model
         return $this->hasMany(AdmissionReceipt::class);
     }
 
+    public function scholarships()
+    {
+        return $this->hasMany(StudentScholarship::class);
+    }
+
+    public function transport()
+    {
+        return $this->hasOne(StudentTransport::class)->where('status', 'active');
+    }
+
+    public function transportHistory()
+    {
+        return $this->hasMany(StudentTransport::class);
+    }
+
     // ─── Helpers ──────────────────────────────────────────────────────────────
 
     public function getFullNameAttribute(): string

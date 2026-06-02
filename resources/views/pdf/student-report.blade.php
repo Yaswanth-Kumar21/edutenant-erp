@@ -164,6 +164,41 @@
         </table>
         @endif
 
+        {{-- Scholarships --}}
+        @if($student->scholarships->isNotEmpty())
+        <div class="section-title">Scholarships (Total: ₹{{ number_format($totalScholarship ?? 0) }})</div>
+        <table>
+            <thead><tr><th>Type</th><th>Category</th><th>Amount</th><th>Semesters</th><th>Status</th></tr></thead>
+            <tbody>
+                @foreach($student->scholarships as $sch)
+                <tr>
+                    <td style="font-weight:600;">{{ $sch->display_name }}</td>
+                    <td>{{ ucfirst($sch->scholarship_category) }}</td>
+                    <td style="color:#059669;font-weight:bold;">₹{{ number_format($sch->amount) }}</td>
+                    <td>{{ $sch->semesters_label }}</td>
+                    <td><span class="badge badge-{{ $sch->status==='active'?'active':'pending' }}">{{ ucfirst($sch->status) }}</span></td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @endif
+
+        {{-- Transport --}}
+        @if($student->vehicle_opted && $student->transport)
+        <div class="section-title">Transport Details</div>
+        <table>
+            <thead><tr><th>Route</th><th>Boarding Point</th><th>Fee/Semester</th><th>Semesters</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>{{ $student->transport->route ?? '—' }}</td>
+                    <td>{{ $student->transport->boarding_point ?? '—' }}</td>
+                    <td style="font-weight:600;">₹{{ number_format($student->transport->transport_fee) }}</td>
+                    <td>{{ $student->transport->semesters_label }}</td>
+                </tr>
+            </tbody>
+        </table>
+        @endif
+
         <div class="footer-row">
             <div style="font-size:9px;color:#9ca3af;">
                 Generated on {{ now()->format('d M Y, h:i A') }}<br>

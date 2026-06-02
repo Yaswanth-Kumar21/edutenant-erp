@@ -66,6 +66,7 @@
                     <tr>
                         <th>Student</th>
                         <th>Branch</th>
+                        <th>Route / Boarding</th>
                         <th>Vehicle Since</th>
                         <th>Last Payment</th>
                         <th class="text-end">Collect</th>
@@ -80,6 +81,14 @@
                             <div style="font-size:0.72rem;color:var(--muted);">{{ $student->admission_number }}</div>
                         </td>
                         <td style="font-size:0.85rem;">{{ $student->branch?->name ?? '—' }}</td>
+                        <td style="font-size:0.82rem;">
+                            @if($student->transport)
+                                <div style="font-weight:500;">{{ $student->transport->route ?? '—' }}</div>
+                                <div style="font-size:0.72rem;color:var(--muted);">{{ $student->transport->boarding_point ?? '' }}</div>
+                            @else
+                                <span style="color:var(--muted);font-size:0.78rem;">Not configured</span>
+                            @endif
+                        </td>
                         <td style="font-size:0.85rem;color:var(--muted);">
                             {{ $student->vehicle_start_date?->format('d M Y') ?? '—' }}
                         </td>
@@ -98,7 +107,7 @@
                                     data-bs-target="#collectModal"
                                     data-student-id="{{ $student->id }}"
                                     data-student-name="{{ $student->full_name }}"
-                                    data-amount="{{ $vehicleFeeType?->amount ?? 0 }}">
+                                    data-amount="{{ $vehicleFeeType?->amount ?? ($student->transport?->transport_fee ?? 0) }}">
                                 <i class="fa-solid fa-plus me-1"></i> Collect
                             </button>
                         </td>

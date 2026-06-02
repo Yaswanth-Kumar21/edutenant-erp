@@ -14,12 +14,11 @@ class GuardianDetail extends Model
         'father_name', 'father_occupation', 'father_phone', 'father_email',
         'mother_name', 'mother_occupation', 'mother_phone',
         'guardian_name', 'guardian_relation', 'guardian_phone', 'guardian_occupation',
-        'annual_income', 'scholarship_eligible', 'scholarship_details',
+        'annual_income',
     ];
 
     protected $casts = [
-        'annual_income'        => 'decimal:2',
-        'scholarship_eligible' => 'boolean',
+        'annual_income' => 'decimal:2',
     ];
 
     // ─── Relationships ────────────────────────────────────────────────────────

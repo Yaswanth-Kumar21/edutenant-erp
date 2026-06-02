@@ -68,6 +68,54 @@
     </div>
 </div>
 
+{{-- Scholarship & Transport Summary --}}
+@if($student->scholarships->isNotEmpty() || ($student->vehicle_opted && $student->transport))
+<div class="row g-3 mb-4">
+    @if($student->scholarships->isNotEmpty())
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <span><i class="fa-solid fa-award me-2" style="color:#059669;"></i>Scholarships</span>
+                <span style="font-weight:700;color:#059669;">₹{{ number_format($totalScholarship) }} total</span>
+            </div>
+            <div class="card-body p-0">
+                @foreach($student->scholarships as $sch)
+                <div class="d-flex align-items-center justify-content-between px-4 py-3"
+                     style="border-bottom:1px solid var(--border);">
+                    <div>
+                        <div style="font-size:.85rem;font-weight:600;">{{ $sch->display_name }}</div>
+                        <div style="font-size:.72rem;color:var(--muted);">{{ ucfirst($sch->scholarship_category) }} &bull; {{ $sch->semesters_label }}</div>
+                    </div>
+                    <div class="text-end">
+                        <div style="font-weight:700;color:#059669;">₹{{ number_format($sch->amount) }}</div>
+                        <span class="badge" style="background:{{ $sch->status==='active'?'#dcfce7':'#fee2e2' }};color:{{ $sch->status==='active'?'#166534':'#991b1b' }};font-size:.68rem;">{{ ucfirst($sch->status) }}</span>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    @endif
+    @if($student->vehicle_opted && $student->transport)
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <span><i class="fa-solid fa-bus me-2" style="color:#0891b2;"></i>Transport</span>
+                <span class="badge" style="background:#dcfce7;color:#166534;">Active</span>
+            </div>
+            <div class="card-body p-0">
+                @foreach([['Route',$student->transport->route??'—'],['Boarding',$student->transport->boarding_point??'—'],['Fee','₹'.number_format($student->transport->transport_fee).'/sem'],['Semesters',$student->transport->semesters_label]] as [$l,$v])
+                <div class="d-flex justify-content-between px-4 py-2" style="border-bottom:1px solid var(--border);font-size:.85rem;">
+                    <span style="color:var(--muted);">{{ $l }}</span><span style="font-weight:600;">{{ $v }}</span>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    @endif
+</div>
+@endif
+
 {{-- Pending Dues --}}
 @if($pendingPayments->isNotEmpty())
 <div class="card mb-4">

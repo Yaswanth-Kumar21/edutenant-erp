@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profile — ' . $student->full_name)
+@section('title', 'Profile ï¿½ ' . $student->full_name)
 
 @section('breadcrumb')
     <li class="breadcrumb-item">
@@ -29,11 +29,11 @@
                     <span class="badge" style="background:rgba(255,255,255,0.15);color:#fff;">{{ $student->category }}</span>
                 </div>
                 <p class="mb-0" style="color:rgba(255,255,255,0.75);font-size:0.875rem;">
-                    {{ $student->branch?->name ?? '—' }}
+                    {{ $student->branch?->name ?? 'ï¿½' }}
                     @if($student->branch?->course) &bull; {{ $student->branch->course->name }} @endif
                     @if($student->branch?->course?->stream) &bull; {{ $student->branch->course->stream->name }} @endif
                     &bull; Semester {{ $student->current_semester }}
-                    &bull; {{ $student->academicYear?->name ?? '—' }}
+                    &bull; {{ $student->academicYear?->name ?? 'ï¿½' }}
                 </p>
             </div>
             <div class="d-flex gap-2 ms-auto flex-wrap">
@@ -139,23 +139,23 @@
                             <dt class="col-5" style="color:var(--muted);">Full Name</dt>
                             <dd class="col-7 mb-2">{{ $student->full_name }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Date of Birth</dt>
-                            <dd class="col-7 mb-2">{{ $student->date_of_birth?->format('d M Y') ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->date_of_birth?->format('d M Y') ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Gender</dt>
-                            <dd class="col-7 mb-2">{{ ucfirst($student->gender ?? '—') }}</dd>
+                            <dd class="col-7 mb-2">{{ ucfirst($student->gender ?? 'ï¿½') }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Blood Group</dt>
-                            <dd class="col-7 mb-2">{{ $student->blood_group ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->blood_group ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Aadhaar</dt>
-                            <dd class="col-7 mb-2">{{ $student->aadhaar_number ? '****'.substr($student->aadhaar_number,-4) : '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->aadhaar_number ? '****'.substr($student->aadhaar_number,-4) : 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Phone</dt>
-                            <dd class="col-7 mb-2">{{ $student->phone ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->phone ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Email</dt>
-                            <dd class="col-7 mb-2">{{ $student->email ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->email ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Address</dt>
                             <dd class="col-7 mb-0">
-                                {{ $student->address ?? '—' }}
+                                {{ $student->address ?? 'ï¿½' }}
                                 @if($student->city), {{ $student->city }}@endif
                                 @if($student->state), {{ $student->state }}@endif
-                                @if($student->pincode) — {{ $student->pincode }}@endif
+                                @if($student->pincode) ï¿½ {{ $student->pincode }}@endif
                             </dd>
                         </dl>
                     </div>
@@ -169,7 +169,7 @@
                             <dt class="col-5" style="color:var(--muted);">Adm. Number</dt>
                             <dd class="col-7 mb-2" style="font-family:monospace;color:#4f46e5;font-weight:600;">{{ $student->admission_number }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Adm. Date</dt>
-                            <dd class="col-7 mb-2">{{ $student->admission_date?->format('d M Y') ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->admission_date?->format('d M Y') ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Category</dt>
                             <dd class="col-7 mb-2">
                                 <span class="badge" style="background:rgba(79,70,229,0.1);color:#4f46e5;">{{ $student->category }}</span>
@@ -210,13 +210,13 @@
                     <div class="col-md-6">
                         <dl class="row mb-0" style="font-size:0.875rem;">
                             <dt class="col-5" style="color:var(--muted);">Branch</dt>
-                            <dd class="col-7 mb-2">{{ $student->branch?->name ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->branch?->name ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Course</dt>
-                            <dd class="col-7 mb-2">{{ $student->branch?->course?->name ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->branch?->course?->name ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Stream</dt>
-                            <dd class="col-7 mb-2">{{ $student->branch?->course?->stream?->name ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->branch?->course?->stream?->name ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Academic Year</dt>
-                            <dd class="col-7 mb-2">{{ $student->academicYear?->name ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->academicYear?->name ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Semester</dt>
                             <dd class="col-7 mb-2">Semester {{ $student->current_semester }}</dd>
                         </dl>
@@ -224,13 +224,13 @@
                     <div class="col-md-6">
                         <dl class="row mb-0" style="font-size:0.875rem;">
                             <dt class="col-5" style="color:var(--muted);">10th Marks</dt>
-                            <dd class="col-7 mb-2">{{ $student->marks_10th ? $student->marks_10th.'%' : '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->marks_10th ? $student->marks_10th.'%' : 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">12th Marks</dt>
-                            <dd class="col-7 mb-2">{{ $student->marks_12th ? $student->marks_12th.'%' : '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->marks_12th ? $student->marks_12th.'%' : 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Prev. Institution</dt>
-                            <dd class="col-7 mb-2">{{ $student->previous_institution ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->previous_institution ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Univ. Reg. No</dt>
-                            <dd class="col-7 mb-2">{{ $student->university_reg_number ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->university_reg_number ?? 'ï¿½' }}</dd>
                         </dl>
                     </div>
                 </div>
@@ -249,38 +249,36 @@
                         <h6 class="section-title">Father</h6>
                         <dl class="row mb-0" style="font-size:0.875rem;">
                             <dt class="col-5" style="color:var(--muted);">Name</dt>
-                            <dd class="col-7 mb-2">{{ $student->guardian->father_name ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->guardian->father_name ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Phone</dt>
-                            <dd class="col-7 mb-2">{{ $student->guardian->father_phone ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->guardian->father_phone ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Occupation</dt>
-                            <dd class="col-7 mb-2">{{ $student->guardian->father_occupation ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->guardian->father_occupation ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Email</dt>
-                            <dd class="col-7 mb-0">{{ $student->guardian->father_email ?? '—' }}</dd>
+                            <dd class="col-7 mb-0">{{ $student->guardian->father_email ?? 'ï¿½' }}</dd>
                         </dl>
                     </div>
                     <div class="col-md-6">
                         <h6 class="section-title">Mother</h6>
                         <dl class="row mb-0" style="font-size:0.875rem;">
                             <dt class="col-5" style="color:var(--muted);">Name</dt>
-                            <dd class="col-7 mb-2">{{ $student->guardian->mother_name ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->guardian->mother_name ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Phone</dt>
-                            <dd class="col-7 mb-2">{{ $student->guardian->mother_phone ?? '—' }}</dd>
+                            <dd class="col-7 mb-2">{{ $student->guardian->mother_phone ?? 'ï¿½' }}</dd>
                             <dt class="col-5" style="color:var(--muted);">Occupation</dt>
-                            <dd class="col-7 mb-0">{{ $student->guardian->mother_occupation ?? '—' }}</dd>
+                            <dd class="col-7 mb-0">{{ $student->guardian->mother_occupation ?? 'ï¿½' }}</dd>
                         </dl>
                     </div>
                     <div class="col-12">
                         <h6 class="section-title">Financial</h6>
                         <dl class="row mb-0" style="font-size:0.875rem;">
                             <dt class="col-4" style="color:var(--muted);">Annual Income</dt>
-                            <dd class="col-8 mb-2">{{ $student->guardian->annual_income ? '?'.number_format($student->guardian->annual_income) : '—' }}</dd>
+                            <dd class="col-8 mb-2">{{ $student->guardian->annual_income ? 'â‚¹'.number_format($student->guardian->annual_income) : 'â€”' }}</dd>
                             <dt class="col-4" style="color:var(--muted);">Scholarship</dt>
                             <dd class="col-8 mb-0">
-                                @if($student->guardian->scholarship_eligible)
+                                @if($student->scholarship_eligible)
                                     <span class="badge" style="background:#dcfce7;color:#166534;">Eligible</span>
-                                    @if($student->guardian->scholarship_details)
-                                        <span style="font-size:0.8rem;color:var(--muted);margin-left:0.5rem;">{{ $student->guardian->scholarship_details }}</span>
-                                    @endif
+                                    <a href="{{ route('admin.students.360', $student) }}#scholarships" style="font-size:.78rem;color:#4f46e5;margin-left:.5rem;">View Details â†’</a>
                                 @else
                                     <span style="color:var(--muted);">Not Eligible</span>
                                 @endif
@@ -371,7 +369,7 @@
                             @foreach($student->feePayments as $payment)
                             <tr>
                                 <td><a href="{{ route('admin.fees.receipt', $payment) }}" style="color:#4f46e5;font-family:monospace;">{{ $payment->receipt_number }}</a></td>
-                                <td>{{ $payment->feeType?->name ?? '—' }}</td>
+                                <td>{{ $payment->feeType?->name ?? 'ï¿½' }}</td>
                                 <td style="font-weight:600;color:#059669;">?{{ number_format($payment->amount_paid) }}</td>
                                 <td style="color:var(--muted);">{{ $payment->payment_date?->format('d M Y') }}</td>
                                 <td>
@@ -444,7 +442,7 @@
                     <div class="mb-3">
                         <label class="form-label">Certificate Type <span class="text-danger">*</span></label>
                         <select name="certificate_type" class="form-select" required>
-                            <option value="">— Select Type —</option>
+                            <option value="">ï¿½ Select Type ï¿½</option>
                             @foreach(\App\Models\StudentCertificate::TYPES as $type => $label)
                                 <option value="{{ $type }}">{{ $label }}</option>
                             @endforeach

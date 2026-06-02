@@ -265,6 +265,12 @@
                         </td>
                         <td class="text-end">
                             <div class="d-flex gap-1 justify-content-end">
+                                <a href="{{ route('admin.students.360', $student) }}"
+                                   class="btn btn-sm btn-outline-primary"
+                                   style="border-radius:0.375rem;padding:0.25rem 0.5rem;background:rgba(79,70,229,.06);"
+                                   title="360° View">
+                                    <i class="fa-solid fa-circle-nodes" style="font-size:0.75rem;"></i>
+                                </a>
                                 <a href="{{ route('admin.students.show', $student) }}"
                                    class="btn btn-sm btn-outline-primary"
                                    style="border-radius:0.375rem;padding:0.25rem 0.5rem;"

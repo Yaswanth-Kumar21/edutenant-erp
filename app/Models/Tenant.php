@@ -13,7 +13,7 @@ class Tenant extends Model
     protected $fillable = [
         'name', 'slug', 'domain', 'email', 'phone', 'address',
         'city', 'state', 'pincode', 'logo', 'website',
-        'principal_name', 'affiliation_number', 'status',
+        'principal_name', 'principal_email', 'affiliation_number', 'status',
         'settings', 'subscription_start', 'subscription_end',
     ];
 
@@ -73,6 +73,16 @@ class Tenant extends Model
     public function admissionReceipts()
     {
         return $this->hasMany(AdmissionReceipt::class);
+    }
+
+    public function emailLogs()
+    {
+        return $this->hasMany(EmailLog::class);
+    }
+
+    public function passwordHistories()
+    {
+        return $this->hasMany(PasswordHistory::class);
     }
 
     // ─── Helpers ──────────────────────────────────────────────────────────────
