@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Profile � ' . $student->full_name)
 
@@ -58,7 +58,7 @@
 <div class="row g-3 mb-4">
     <div class="col-6 col-md-3">
         <div class="card text-center p-3">
-            <div style="font-size:1.5rem;font-weight:800;color:#4f46e5;">?{{ number_format($student->total_fees_paid) }}</div>
+            <div style="font-size:1.5rem;font-weight:800;color:#4f46e5;">&#8377;{{ number_format($student->total_fees_paid) }}</div>
             <div style="font-size:0.78rem;color:var(--muted);">Fees Paid</div>
         </div>
     </div>
@@ -370,7 +370,7 @@
                             <tr>
                                 <td><a href="{{ route('admin.fees.receipt', $payment) }}" style="color:#4f46e5;font-family:monospace;">{{ $payment->receipt_number }}</a></td>
                                 <td>{{ $payment->feeType?->name ?? '�' }}</td>
-                                <td style="font-weight:600;color:#059669;">?{{ number_format($payment->amount_paid) }}</td>
+                                <td style="font-weight:600;color:#059669;">&#8377;{{ number_format($payment->amount_paid) }}</td>
                                 <td style="color:var(--muted);">{{ $payment->payment_date?->format('d M Y') }}</td>
                                 <td>
                                     @if($payment->status === 'paid')
@@ -385,7 +385,7 @@
                         <tfoot>
                             <tr style="background:var(--bg);">
                                 <td colspan="2" style="font-weight:600;">Total Paid</td>
-                                <td style="font-weight:700;color:#059669;">?{{ number_format($student->total_fees_paid) }}</td>
+                                <td style="font-weight:700;color:#059669;">&#8377;{{ number_format($student->total_fees_paid) }}</td>
                                 <td colspan="2"></td>
                             </tr>
                         </tfoot>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ï»¿@extends('layouts.app')
 @section('title', 'Branch Details')
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('admin.setup.branches.index') }}" style="color:var(--primary);text-decoration:none;">Branches</a></li>
@@ -18,12 +18,12 @@
             <div class="card-body">
                 <dl class="row mb-0" style="font-size:.875rem;">
                     <dt class="col-4" style="color:var(--muted);">Name</dt><dd class="col-8 mb-3" style="font-weight:600;">{{ $branch->name }}</dd>
-                    <dt class="col-4" style="color:var(--muted);">Code</dt><dd class="col-8 mb-3" style="font-family:monospace;color:#4f46e5;">{{ $branch->code ?? '—' }}</dd>
-                    <dt class="col-4" style="color:var(--muted);">Course</dt><dd class="col-8 mb-3">{{ $branch->course?->name ?? '—' }}</dd>
-                    <dt class="col-4" style="color:var(--muted);">Stream</dt><dd class="col-8 mb-3">{{ $branch->course?->stream?->name ?? '—' }}</dd>
-                    <dt class="col-4" style="color:var(--muted);">Intake</dt><dd class="col-8 mb-3">{{ $branch->intake_capacity ?? '—' }}</dd>
-                    <dt class="col-4" style="color:var(--muted);">Tuition (Student)</dt><dd class="col-8 mb-3">?{{ number_format($branch->tuition_fee_student ?? 0) }}</dd>
-                    <dt class="col-4" style="color:var(--muted);">Tuition (Govt)</dt><dd class="col-8 mb-0">?{{ number_format($branch->tuition_fee_govt ?? 0) }}</dd>
+                    <dt class="col-4" style="color:var(--muted);">Code</dt><dd class="col-8 mb-3" style="font-family:monospace;color:#4f46e5;">{{ $branch->code ?? 'ï¿½' }}</dd>
+                    <dt class="col-4" style="color:var(--muted);">Course</dt><dd class="col-8 mb-3">{{ $branch->course?->name ?? 'ï¿½' }}</dd>
+                    <dt class="col-4" style="color:var(--muted);">Stream</dt><dd class="col-8 mb-3">{{ $branch->course?->stream?->name ?? 'ï¿½' }}</dd>
+                    <dt class="col-4" style="color:var(--muted);">Intake</dt><dd class="col-8 mb-3">{{ $branch->intake_capacity ?? 'ï¿½' }}</dd>
+                    <dt class="col-4" style="color:var(--muted);">Tuition (Student)</dt><dd class="col-8 mb-3">&#8377;{{ number_format($branch->tuition_fee_student ?? 0) }}</dd>
+                    <dt class="col-4" style="color:var(--muted);">Tuition (Govt)</dt><dd class="col-8 mb-0">&#8377;{{ number_format($branch->tuition_fee_govt ?? 0) }}</dd>
                 </dl>
             </div>
         </div>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ï»¿@extends('layouts.app')
 @section('title', 'Fees Report')
 
 @section('breadcrumb')
@@ -32,7 +32,7 @@
             <div class="d-flex align-items-start justify-content-between">
                 <div>
                     <div class="stat-label mb-2">Total Collected</div>
-                    <div class="stat-value" style="font-size:1.5rem;">?{{ number_format($payments->where('status','paid')->sum('amount_paid')) }}</div>
+                    <div class="stat-value" style="font-size:1.5rem;">&#8377;{{ number_format($payments->where('status','paid')->sum('amount_paid')) }}</div>
                     <div class="mt-2" style="font-size:.78rem;opacity:.8;">All time</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
@@ -44,7 +44,7 @@
             <div class="d-flex align-items-start justify-content-between">
                 <div>
                     <div class="stat-label mb-2">Total Pending</div>
-                    <div class="stat-value" style="font-size:1.5rem;">?{{ number_format($payments->whereIn('status',['pending','partial'])->sum('amount_due')) }}</div>
+                    <div class="stat-value" style="font-size:1.5rem;">&#8377;{{ number_format($payments->whereIn('status',['pending','partial'])->sum('amount_due')) }}</div>
                     <div class="mt-2" style="font-size:.78rem;opacity:.8;">Outstanding dues</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-clock"></i></div>
@@ -98,12 +98,12 @@
                     <tr>
                         <td><span style="font-family:monospace;font-size:.8rem;color:#4f46e5;font-weight:600;">{{ $payment->receipt_number }}</span></td>
                         <td>
-                            <div style="font-weight:500;font-size:.875rem;">{{ $payment->student?->full_name ?? '—' }}</div>
+                            <div style="font-weight:500;font-size:.875rem;">{{ $payment->student?->full_name ?? 'ï¿½' }}</div>
                             <div style="font-size:.72rem;color:var(--muted);">{{ $payment->student?->admission_number }}</div>
                         </td>
-                        <td style="font-size:.82rem;">{{ $payment->feeType?->name ?? '—' }}</td>
-                        <td style="font-size:.85rem;">?{{ number_format($payment->amount_due, 2) }}</td>
-                        <td style="font-weight:700;color:#059669;">?{{ number_format($payment->amount_paid, 2) }}</td>
+                        <td style="font-size:.82rem;">{{ $payment->feeType?->name ?? 'ï¿½' }}</td>
+                        <td style="font-size:.85rem;">&#8377;{{ number_format($payment->amount_due, 2) }}</td>
+                        <td style="font-weight:700;color:#059669;">&#8377;{{ number_format($payment->amount_paid, 2) }}</td>
                         <td style="font-size:.85rem;color:{{ $payment->balance > 0 ? '#dc2626' : '#059669' }};">
                             {{ $payment->balance > 0 ? '?'.number_format($payment->balance,2) : 'Nil' }}
                         </td>

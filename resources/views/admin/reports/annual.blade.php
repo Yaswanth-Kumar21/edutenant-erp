@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ï»¿@extends('layouts.app')
 @section('title', 'Annual Report')
 
 @section('breadcrumb')
@@ -43,7 +43,7 @@
             <div class="d-flex align-items-start justify-content-between">
                 <div>
                     <div class="stat-label mb-2">Total Annual Collection</div>
-                    <div class="stat-value" style="font-size:1.5rem;">?{{ number_format($totalAnnual) }}</div>
+                    <div class="stat-value" style="font-size:1.5rem;">&#8377;{{ number_format($totalAnnual) }}</div>
                     <div class="mt-2" style="font-size:.78rem;opacity:.8;">{{ $year }}</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
@@ -68,7 +68,7 @@
                 <div>
                     <div class="stat-label mb-2">Best Month</div>
                     <div class="stat-value" style="font-size:1.3rem;">
-                        {{ $maxMonth ? $monthNames[$maxMonth->month - 1] : '—' }}
+                        {{ $maxMonth ? $monthNames[$maxMonth->month - 1] : 'ï¿½' }}
                     </div>
                     <div class="mt-2" style="font-size:.78rem;opacity:.8;">
                         {{ $maxMonth ? '?'.number_format($maxMonth->total) : 'No data' }}
@@ -85,7 +85,7 @@
     <div class="col-lg-8">
         <div class="card">
             <div class="card-header">
-                <i class="fa-solid fa-chart-bar me-2" style="color:#7c3aed;"></i>Monthly Fee Collection — {{ $year }}
+                <i class="fa-solid fa-chart-bar me-2" style="color:#7c3aed;"></i>Monthly Fee Collection ï¿½ {{ $year }}
             </div>
             <div class="card-body p-3">
                 @if($annualFees->isEmpty())
@@ -126,14 +126,14 @@
                         @endif
                     </div>
                     <span style="font-weight:700;color:{{ $mData ? '#7c3aed' : 'var(--muted)' }};min-width:80px;text-align:right;">
-                        {{ $mData ? '?'.number_format($mData->total) : '—' }}
+                        {{ $mData ? '?'.number_format($mData->total) : 'ï¿½' }}
                     </span>
                 </div>
                 @endforeach
                 <div class="d-flex align-items-center justify-content-between px-3 py-2"
                      style="background:var(--bg);font-size:.875rem;font-weight:700;">
                     <span>Total</span>
-                    <span style="color:#7c3aed;">?{{ number_format($totalAnnual) }}</span>
+                    <span style="color:#7c3aed;">&#8377;{{ number_format($totalAnnual) }}</span>
                 </div>
                 @endif
             </div>

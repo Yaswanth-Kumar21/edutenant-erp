@@ -39,7 +39,7 @@
                             @php $fc = ['one_time'=>['#dbeafe','#1e40af'],'per_semester'=>['#dcfce7','#166534'],'per_year'=>['#fef3c7','#92400e'],'monthly'=>['#f3e8ff','#7c3aed']][$type->frequency] ?? ['#f3f4f6','#374151']; @endphp
                             <span class="badge" style="background:{{ $fc[0] }};color:{{ $fc[1] }};font-size:.72rem;">{{ ucfirst(str_replace('_',' ',$type->frequency)) }}</span>
                         </td>
-                        <td style="font-weight:700;color:#059669;">?{{ number_format($type->amount ?? 0, 2) }}</td>
+                        <td style="font-weight:700;color:#059669;">&#8377;{{ number_format($type->amount ?? 0, 2) }}</td>
                         <td>
                             @if($type->is_active ?? true)
                                 <span class="badge" style="background:#dcfce7;color:#166534;">Active</span>

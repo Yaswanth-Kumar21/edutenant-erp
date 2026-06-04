@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Payment � ' . $payment->receipt_number)
 
@@ -85,28 +85,28 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--border);font-size:0.875rem;">
                     <span style="color:var(--muted);">Amount Due</span>
-                    <strong>?{{ number_format($payment->amount_due, 2) }}</strong>
+                    <strong>&#8377;{{ number_format($payment->amount_due, 2) }}</strong>
                 </div>
                 @if($payment->discount > 0)
                 <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--border);font-size:0.875rem;">
                     <span style="color:var(--muted);">Discount</span>
-                    <strong style="color:#059669;">- ?{{ number_format($payment->discount, 2) }}</strong>
+                    <strong style="color:#059669;">- &#8377;{{ number_format($payment->discount, 2) }}</strong>
                 </div>
                 @endif
                 @if($payment->fine > 0)
                 <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--border);font-size:0.875rem;">
                     <span style="color:var(--muted);">Fine</span>
-                    <strong style="color:#dc2626;">+ ?{{ number_format($payment->fine, 2) }}</strong>
+                    <strong style="color:#dc2626;">+ &#8377;{{ number_format($payment->fine, 2) }}</strong>
                 </div>
                 @endif
                 <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--border);font-size:0.875rem;">
                     <span style="color:var(--muted);">Amount Paid</span>
-                    <strong style="color:#059669;">?{{ number_format($payment->amount_paid, 2) }}</strong>
+                    <strong style="color:#059669;">&#8377;{{ number_format($payment->amount_paid, 2) }}</strong>
                 </div>
                 <div class="d-flex justify-content-between py-3" style="font-size:1rem;font-weight:700;">
                     <span>Balance</span>
                     <span style="color:{{ $payment->balance > 0 ? '#dc2626' : '#059669' }};">
-                        ?{{ number_format(max(0, $payment->balance), 2) }}
+                        &#8377;{{ number_format(max(0, $payment->balance), 2) }}
                     </span>
                 </div>
                 @php $sc = ['paid'=>['#dcfce7','#166534'],'partial'=>['#fef3c7','#92400e'],'pending'=>['#fee2e2','#991b1b'],'exempted'=>['#dbeafe','#1e40af']]; [$bg,$fg] = $sc[$payment->status] ?? ['#f3f4f6','#374151']; @endphp

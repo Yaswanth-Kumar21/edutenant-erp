@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ï»¿@extends('layouts.app')
 @section('title', $staff->name)
 
 @section('content')
@@ -26,7 +26,7 @@
                 <img src="{{ $staff->photo_url }}" class="rounded-circle mb-3"
                      style="width:100px;height:100px;object-fit:cover;border:3px solid var(--border);" alt="">
                 <h5 class="mb-1 fw-700" style="font-weight:700;">{{ $staff->name }}</h5>
-                <p class="mb-2" style="color:var(--muted);font-size:.875rem;">{{ $staff->designation ?? '—' }}</p>
+                <p class="mb-2" style="color:var(--muted);font-size:.875rem;">{{ $staff->designation ?? 'ï¿½' }}</p>
                 @if($staff->isTeaching())
                     <span class="badge" style="background:rgba(79,70,229,.1);color:#4f46e5;">
                         <i class="fa-solid fa-chalkboard-teacher me-1"></i>Teaching
@@ -91,7 +91,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between mb-2">
                     <span style="font-size:.85rem;color:var(--muted);">Gross Salary</span>
-                    <span style="font-weight:600;">?{{ number_format($staff->monthly_salary) }}</span>
+                    <span style="font-weight:600;">&#8377;{{ number_format($staff->monthly_salary) }}</span>
                 </div>
                 @if($staff->pf_deduction > 0)
                 <div class="d-flex justify-content-between mb-2">
@@ -109,7 +109,7 @@
                 <div class="d-flex justify-content-between">
                     <span style="font-weight:600;">Net Salary</span>
                     <span style="font-weight:700;color:#059669;font-size:1.1rem;">
-                        ?{{ number_format($staff->monthly_salary - $staff->pf_deduction - $staff->tax_deduction) }}
+                        &#8377;{{ number_format($staff->monthly_salary - $staff->pf_deduction - $staff->tax_deduction) }}
                     </span>
                 </div>
                 <div class="mt-2" style="font-size:.75rem;color:var(--muted);">
@@ -156,7 +156,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <span style="font-weight:600;">Estimated Net Salary</span>
                         <span style="font-size:1.4rem;font-weight:800;color:#059669;">
-                            ?{{ number_format($salaryCalc['net_salary']) }}
+                            &#8377;{{ number_format($salaryCalc['net_salary']) }}
                         </span>
                     </div>
                 </div>
@@ -187,7 +187,7 @@
                             ];
                             $c = $colors[$att->status] ?? '#6b7280';
                         @endphp
-                        <div title="{{ $att->attendance_date->format('d M') }} — {{ ucfirst($att->status) }}"
+                        <div title="{{ $att->attendance_date->format('d M') }} ï¿½ {{ ucfirst($att->status) }}"
                              style="width:28px;height:28px;border-radius:4px;background:{{ $c }};
                                     display:flex;align-items:center;justify-content:center;
                                     color:#fff;font-size:.65rem;font-weight:600;cursor:default;">
@@ -232,9 +232,9 @@
                         @foreach($recentPayrolls as $payroll)
                         <tr>
                             <td style="font-weight:500;font-size:.875rem;">{{ $payroll->pay_period }}</td>
-                            <td class="text-center" style="font-size:.85rem;">?{{ number_format($payroll->gross_salary) }}</td>
+                            <td class="text-center" style="font-size:.85rem;">&#8377;{{ number_format($payroll->gross_salary) }}</td>
                             <td class="text-center" style="font-size:.85rem;color:#dc2626;">-?{{ number_format($payroll->total_deductions) }}</td>
-                            <td class="text-center" style="font-weight:600;color:#059669;">?{{ number_format($payroll->net_salary) }}</td>
+                            <td class="text-center" style="font-weight:600;color:#059669;">&#8377;{{ number_format($payroll->net_salary) }}</td>
                             <td class="text-center">
                                 @if($payroll->isPaid())
                                     <span class="badge" style="background:#dcfce7;color:#166534;">Paid</span>

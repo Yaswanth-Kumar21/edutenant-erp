@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ï»¿@extends('layouts.app')
 @section('title', 'Income Details')
 
 @section('breadcrumb')
@@ -32,16 +32,16 @@
                     <dd class="col-8 mb-3" style="font-weight:600;">{{ $income->title }}</dd>
                     <dt class="col-4" style="color:var(--muted);">Category</dt>
                     <dd class="col-8 mb-3">
-                        <span class="badge" style="background:rgba(5,150,105,.1);color:#059669;">{{ $income->incomeCategory?->name ?? '—' }}</span>
+                        <span class="badge" style="background:rgba(5,150,105,.1);color:#059669;">{{ $income->incomeCategory?->name ?? 'ï¿½' }}</span>
                     </dd>
                     <dt class="col-4" style="color:var(--muted);">Amount</dt>
-                    <dd class="col-8 mb-3" style="font-weight:700;color:#059669;font-size:1.1rem;">?{{ number_format($income->amount, 2) }}</dd>
+                    <dd class="col-8 mb-3" style="font-weight:700;color:#059669;font-size:1.1rem;">&#8377;{{ number_format($income->amount, 2) }}</dd>
                     <dt class="col-4" style="color:var(--muted);">Date</dt>
-                    <dd class="col-8 mb-3">{{ $income->income_date?->format('d M Y') ?? '—' }}</dd>
+                    <dd class="col-8 mb-3">{{ $income->income_date?->format('d M Y') ?? 'ï¿½' }}</dd>
                     <dt class="col-4" style="color:var(--muted);">Payment Mode</dt>
-                    <dd class="col-8 mb-3">{{ ucfirst($income->payment_mode ?? '—') }}</dd>
+                    <dd class="col-8 mb-3">{{ ucfirst($income->payment_mode ?? 'ï¿½') }}</dd>
                     <dt class="col-4" style="color:var(--muted);">Reference No</dt>
-                    <dd class="col-8 mb-3">{{ $income->reference_number ?? '—' }}</dd>
+                    <dd class="col-8 mb-3">{{ $income->reference_number ?? 'ï¿½' }}</dd>
                     @if($income->description)
                     <dt class="col-4" style="color:var(--muted);">Description</dt>
                     <dd class="col-8 mb-0">{{ $income->description }}</dd>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 @section('title', 'Fee Type Details')
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('admin.fees.types.index') }}" style="color:var(--primary);text-decoration:none;">Fee Types</a></li>
@@ -27,7 +27,7 @@
                         <span class="badge" style="background:{{ $fc[0] }};color:{{ $fc[1] }};">{{ ucfirst(str_replace('_',' ',$type->frequency)) }}</span>
                     </dd>
                     <dt class="col-4" style="color:var(--muted);">Default Amount</dt>
-                    <dd class="col-8 mb-3" style="font-weight:700;color:#059669;font-size:1rem;">?{{ number_format($type->amount ?? 0, 2) }}</dd>
+                    <dd class="col-8 mb-3" style="font-weight:700;color:#059669;font-size:1rem;">&#8377;{{ number_format($type->amount ?? 0, 2) }}</dd>
                     <dt class="col-4" style="color:var(--muted);">Status</dt>
                     <dd class="col-8 mb-0">
                         @if($type->is_active ?? true)

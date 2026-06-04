@@ -39,8 +39,25 @@ class AcademicYearController extends Controller
 
     public function update(Request $request, AcademicYear $academicYear)
     {
-        $academicYear->update($request->validate(['name' => 'required|string|max:20']));
-        return redirect()->route('admin.setup.academic-years.index')->with('success', 'Updated.');
+        $data = $request->validate([
+            'name'       => 'required|string|max:20',
+            'start_date' => 'nullable|date',
+            'end_date'   => 'nullable|date|after:start_date',
+            'is_current' => 'boolean',
+        ]);
+
+        // If marking as current, unset all others for this tenant first
+        if (!empty($data['is_current'])) {
+            AcademicYear::where('tenant_id', $academicYear->tenant_id)
+                ->where('id', '!=', $academicYear->id)
+                ->update(['is_current' => false]);
+        }
+
+        $data['is_current'] = !empty($data['is_current']);
+        $academicYear->update($data);
+
+        return redirect()->route('admin.setup.academic-years.index')
+            ->with('success', 'Academic year updated.');
     }
 
     public function destroy(AcademicYear $academicYear)

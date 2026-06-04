@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ï»¿@extends('layouts.app')
 @section('title', 'Income')
 
 @section('breadcrumb')
@@ -32,13 +32,13 @@
 <div class="row g-3 mb-4">
     <div class="col-sm-4">
         <div class="card text-center p-3">
-            <div style="font-size:1.5rem;font-weight:800;color:#059669;">?{{ number_format($stats['total_this_month'] ?? 0) }}</div>
+            <div style="font-size:1.5rem;font-weight:800;color:#059669;">&#8377;{{ number_format($stats['total_this_month'] ?? 0) }}</div>
             <div style="font-size:.78rem;color:var(--muted);">This Month</div>
         </div>
     </div>
     <div class="col-sm-4">
         <div class="card text-center p-3">
-            <div style="font-size:1.5rem;font-weight:800;color:#4f46e5;">?{{ number_format($stats['total_this_year'] ?? 0) }}</div>
+            <div style="font-size:1.5rem;font-weight:800;color:#4f46e5;">&#8377;{{ number_format($stats['total_this_year'] ?? 0) }}</div>
             <div style="font-size:.78rem;color:var(--muted);">This Year</div>
         </div>
     </div>
@@ -111,12 +111,12 @@
                         </td>
                         <td>
                             <span class="badge" style="background:rgba(5,150,105,.1);color:#059669;font-size:.72rem;">
-                                {{ $income->incomeCategory?->name ?? '—' }}
+                                {{ $income->incomeCategory?->name ?? 'ï¿½' }}
                             </span>
                         </td>
-                        <td style="font-size:.82rem;font-family:monospace;color:var(--muted);">{{ $income->reference_number ?? '—' }}</td>
-                        <td style="font-weight:700;color:#059669;">?{{ number_format($income->amount, 2) }}</td>
-                        <td style="font-size:.82rem;">{{ ucfirst($income->payment_mode ?? '—') }}</td>
+                        <td style="font-size:.82rem;font-family:monospace;color:var(--muted);">{{ $income->reference_number ?? 'ï¿½' }}</td>
+                        <td style="font-weight:700;color:#059669;">&#8377;{{ number_format($income->amount, 2) }}</td>
+                        <td style="font-size:.82rem;">{{ ucfirst($income->payment_mode ?? 'ï¿½') }}</td>
                         <td>
                             <div class="d-flex gap-1">
                                 <a href="{{ route('admin.incomes.edit', $income) }}" class="btn btn-sm btn-outline-secondary" style="padding:.2rem .5rem;"><i class="fa-solid fa-pen" style="font-size:.72rem;"></i></a>

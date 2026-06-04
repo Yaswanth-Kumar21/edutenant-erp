@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ï»¿@extends('layouts.app')
 @section('title', 'Expense Details')
 
 @section('breadcrumb')
@@ -32,18 +32,18 @@
                     <dd class="col-8 mb-3" style="font-weight:600;">{{ $expense->title }}</dd>
                     <dt class="col-4" style="color:var(--muted);">Category</dt>
                     <dd class="col-8 mb-3">
-                        <span class="badge" style="background:rgba(220,38,38,.1);color:#dc2626;">{{ $expense->expenseCategory?->name ?? '—' }}</span>
+                        <span class="badge" style="background:rgba(220,38,38,.1);color:#dc2626;">{{ $expense->expenseCategory?->name ?? 'ï¿½' }}</span>
                     </dd>
                     <dt class="col-4" style="color:var(--muted);">Amount</dt>
-                    <dd class="col-8 mb-3" style="font-weight:700;color:#dc2626;font-size:1.1rem;">?{{ number_format($expense->amount, 2) }}</dd>
+                    <dd class="col-8 mb-3" style="font-weight:700;color:#dc2626;font-size:1.1rem;">&#8377;{{ number_format($expense->amount, 2) }}</dd>
                     <dt class="col-4" style="color:var(--muted);">Date</dt>
-                    <dd class="col-8 mb-3">{{ $expense->expense_date?->format('d M Y') ?? '—' }}</dd>
+                    <dd class="col-8 mb-3">{{ $expense->expense_date?->format('d M Y') ?? 'ï¿½' }}</dd>
                     <dt class="col-4" style="color:var(--muted);">Payment Mode</dt>
-                    <dd class="col-8 mb-3">{{ ucfirst($expense->payment_mode ?? '—') }}</dd>
+                    <dd class="col-8 mb-3">{{ ucfirst($expense->payment_mode ?? 'ï¿½') }}</dd>
                     <dt class="col-4" style="color:var(--muted);">Bill Number</dt>
-                    <dd class="col-8 mb-3">{{ $expense->bill_number ?? '—' }}</dd>
+                    <dd class="col-8 mb-3">{{ $expense->bill_number ?? 'ï¿½' }}</dd>
                     <dt class="col-4" style="color:var(--muted);">Vendor</dt>
-                    <dd class="col-8 mb-3">{{ $expense->vendor_name ?? '—' }}</dd>
+                    <dd class="col-8 mb-3">{{ $expense->vendor_name ?? 'ï¿½' }}</dd>
                     @if($expense->description)
                     <dt class="col-4" style="color:var(--muted);">Description</dt>
                     <dd class="col-8 mb-0">{{ $expense->description }}</dd>

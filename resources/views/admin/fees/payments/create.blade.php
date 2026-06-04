@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ï»¿@extends('layouts.app')
 
 @section('title', 'Collect Fee')
 
@@ -63,11 +63,11 @@
                             <select name="student_id" id="student_id"
                                     class="form-select @error('student_id') is-invalid @enderror"
                                     required onchange="loadStudentInfo(this.value)">
-                                <option value="">— Search and select student —</option>
+                                <option value="">ï¿½ Search and select student ï¿½</option>
                                 @foreach($students as $s)
                                     <option value="{{ $s->id }}"
                                         {{ (old('student_id') == $s->id || ($student && $student->id == $s->id)) ? 'selected' : '' }}>
-                                        {{ $s->admission_number }} — {{ $s->first_name }} {{ $s->last_name }}
+                                        {{ $s->admission_number }} ï¿½ {{ $s->first_name }} {{ $s->last_name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -111,13 +111,13 @@
                             <select name="fee_type_id" id="fee_type_id"
                                     class="form-select @error('fee_type_id') is-invalid @enderror"
                                     required onchange="updateAmountDue(this)">
-                                <option value="">— Select Fee Type —</option>
+                                <option value="">ï¿½ Select Fee Type ï¿½</option>
                                 @foreach($feeTypes as $ft)
                                     <option value="{{ $ft->id }}"
                                             data-amount="{{ $ft->amount }}"
                                         {{ old('fee_type_id') == $ft->id ? 'selected' : '' }}>
                                         {{ $ft->name }}
-                                        @if($ft->amount > 0) (?{{ number_format($ft->amount) }}) @endif
+                                        @if($ft->amount > 0) (&#8377;{{ number_format($ft->amount) }}) @endif
                                     </option>
                                 @endforeach
                             </select>
@@ -127,7 +127,7 @@
                             <label class="form-label">Academic Year <span class="text-danger">*</span></label>
                             <select name="academic_year_id"
                                     class="form-select @error('academic_year_id') is-invalid @enderror" required>
-                                <option value="">— Select Year —</option>
+                                <option value="">ï¿½ Select Year ï¿½</option>
                                 @foreach($academicYears as $yr)
                                     <option value="{{ $yr->id }}"
                                         {{ (old('academic_year_id') == $yr->id || (!old('academic_year_id') && $yr->is_current)) ? 'selected' : '' }}>
@@ -151,7 +151,7 @@
                         <div class="col-md-4">
                             <label class="form-label">Amount Due (?) <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">?</span>
+                                <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">&#8377;</span>
                                 <input type="number" name="amount_due" id="amount_due"
                                        class="form-control @error('amount_due') is-invalid @enderror"
                                        value="{{ old('amount_due', 0) }}" min="0" step="0.01"
@@ -162,7 +162,7 @@
                         <div class="col-md-4">
                             <label class="form-label">Discount (?)</label>
                             <div class="input-group">
-                                <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">?</span>
+                                <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">&#8377;</span>
                                 <input type="number" name="discount" id="discount"
                                        class="form-control" value="{{ old('discount', 0) }}"
                                        min="0" step="0.01" oninput="recalculate()">
@@ -171,7 +171,7 @@
                         <div class="col-md-4">
                             <label class="form-label">Fine / Late Fee (?)</label>
                             <div class="input-group">
-                                <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">?</span>
+                                <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">&#8377;</span>
                                 <input type="number" name="fine" id="fine"
                                        class="form-control" value="{{ old('fine', 0) }}"
                                        min="0" step="0.01" oninput="recalculate()">
@@ -180,7 +180,7 @@
                         <div class="col-md-4">
                             <label class="form-label">Amount Paid (?) <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">?</span>
+                                <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">&#8377;</span>
                                 <input type="number" name="amount_paid" id="amount_paid"
                                        class="form-control @error('amount_paid') is-invalid @enderror"
                                        value="{{ old('amount_paid', 0) }}" min="0" step="0.01"
@@ -256,27 +256,27 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--border);font-size:0.875rem;">
                         <span style="color:var(--muted);">Amount Due</span>
-                        <span id="sum-due" style="font-weight:600;">?0</span>
+                        <span id="sum-due" style="font-weight:600;">&#8377;0</span>
                     </div>
                     <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--border);font-size:0.875rem;">
                         <span style="color:var(--muted);">Discount</span>
-                        <span id="sum-discount" style="color:#059669;">- ?0</span>
+                        <span id="sum-discount" style="color:#059669;">- &#8377;0</span>
                     </div>
                     <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--border);font-size:0.875rem;">
                         <span style="color:var(--muted);">Fine / Late Fee</span>
-                        <span id="sum-fine" style="color:#dc2626;">+ ?0</span>
+                        <span id="sum-fine" style="color:#dc2626;">+ &#8377;0</span>
                     </div>
                     <div class="d-flex justify-content-between py-2" style="border-bottom:2px solid var(--border);font-size:0.875rem;font-weight:600;">
                         <span>Net Payable</span>
-                        <span id="sum-net" style="color:#4f46e5;">?0</span>
+                        <span id="sum-net" style="color:#4f46e5;">&#8377;0</span>
                     </div>
                     <div class="d-flex justify-content-between py-2" style="border-bottom:1px solid var(--border);font-size:0.875rem;">
                         <span style="color:var(--muted);">Amount Paid</span>
-                        <span id="sum-paid" style="color:#059669;font-weight:600;">?0</span>
+                        <span id="sum-paid" style="color:#059669;font-weight:600;">&#8377;0</span>
                     </div>
                     <div class="d-flex justify-content-between py-3" style="font-size:1rem;font-weight:700;">
                         <span>Balance Due</span>
-                        <span id="sum-balance" style="color:#dc2626;">?0</span>
+                        <span id="sum-balance" style="color:#dc2626;">&#8377;0</span>
                     </div>
 
                     {{-- Status indicator --}}
@@ -378,7 +378,7 @@
         // Simple display from select option text
         const sel  = document.getElementById('student_id');
         const text = sel.options[sel.selectedIndex].text;
-        const parts = text.split(' — ');
+        const parts = text.split(' ï¿½ ');
         document.getElementById('student-name').textContent = parts[1] || text;
         document.getElementById('student-meta').textContent = parts[0] || '';
         document.getElementById('student-avatar').textContent = (parts[1] || 'S').charAt(0).toUpperCase();

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ï»¿@extends('layouts.app')
 @section('title', 'Expenses')
 
 @section('breadcrumb')
@@ -42,13 +42,13 @@
 <div class="row g-3 mb-4">
     <div class="col-sm-4">
         <div class="card text-center p-3">
-            <div style="font-size:1.5rem;font-weight:800;color:#dc2626;">?{{ number_format($stats['total_this_month'] ?? 0) }}</div>
+            <div style="font-size:1.5rem;font-weight:800;color:#dc2626;">&#8377;{{ number_format($stats['total_this_month'] ?? 0) }}</div>
             <div style="font-size:.78rem;color:var(--muted);">This Month</div>
         </div>
     </div>
     <div class="col-sm-4">
         <div class="card text-center p-3">
-            <div style="font-size:1.5rem;font-weight:800;color:#d97706;">?{{ number_format($stats['total_this_year'] ?? 0) }}</div>
+            <div style="font-size:1.5rem;font-weight:800;color:#d97706;">&#8377;{{ number_format($stats['total_this_year'] ?? 0) }}</div>
             <div style="font-size:.78rem;color:var(--muted);">This Year</div>
         </div>
     </div>
@@ -128,12 +128,12 @@
                         </td>
                         <td>
                             <span class="badge" style="background:rgba(220,38,38,.1);color:#dc2626;font-size:.72rem;">
-                                {{ $expense->expenseCategory?->name ?? '—' }}
+                                {{ $expense->expenseCategory?->name ?? 'ï¿½' }}
                             </span>
                         </td>
-                        <td style="font-size:.82rem;">{{ $expense->vendor_name ?? '—' }}</td>
-                        <td style="font-weight:700;color:#dc2626;">?{{ number_format($expense->amount, 2) }}</td>
-                        <td style="font-size:.82rem;">{{ ucfirst($expense->payment_mode ?? '—') }}</td>
+                        <td style="font-size:.82rem;">{{ $expense->vendor_name ?? 'ï¿½' }}</td>
+                        <td style="font-weight:700;color:#dc2626;">&#8377;{{ number_format($expense->amount, 2) }}</td>
+                        <td style="font-size:.82rem;">{{ ucfirst($expense->payment_mode ?? 'ï¿½') }}</td>
                         <td>
                             <div class="d-flex gap-1">
                                 <a href="{{ route('admin.expenses.edit', $expense) }}"

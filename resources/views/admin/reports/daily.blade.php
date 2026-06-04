@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ï»¿@extends('layouts.app')
 @section('title', 'Daily Report')
 
 @section('breadcrumb')
@@ -45,7 +45,7 @@
             <div class="d-flex align-items-start justify-content-between">
                 <div>
                     <div class="stat-label mb-2">Total Collected</div>
-                    <div class="stat-value" style="font-size:1.6rem;">?{{ number_format($totalToday) }}</div>
+                    <div class="stat-value" style="font-size:1.6rem;">&#8377;{{ number_format($totalToday) }}</div>
                     <div class="mt-2" style="font-size:.78rem;opacity:.8;">{{ \Carbon\Carbon::parse($date)->format('d M Y') }}</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
@@ -70,7 +70,7 @@
                 <div>
                     <div class="stat-label mb-2">Avg per Transaction</div>
                     <div class="stat-value" style="font-size:1.6rem;">
-                        ?{{ $dailyFees->count() > 0 ? number_format($totalToday / $dailyFees->count()) : 0 }}
+                        &#8377;{{ $dailyFees->count() > 0 ? number_format($totalToday / $dailyFees->count()) : 0 }}
                     </div>
                     <div class="mt-2" style="font-size:.78rem;opacity:.8;">Average amount</div>
                 </div>
@@ -85,7 +85,7 @@
     <div class="card-header d-flex align-items-center justify-content-between">
         <span style="font-weight:600;">
             <i class="fa-solid fa-list me-2" style="color:#4f46e5;"></i>
-            Fee Transactions — {{ \Carbon\Carbon::parse($date)->format('d M Y') }}
+            Fee Transactions ï¿½ {{ \Carbon\Carbon::parse($date)->format('d M Y') }}
         </span>
         <span class="badge" style="background:rgba(79,70,229,.1);color:#4f46e5;">{{ $dailyFees->count() }} records</span>
     </div>
@@ -127,13 +127,13 @@
                                 </div>
                             </div>
                         </td>
-                        <td style="font-size:.85rem;">{{ $payment->feeType?->name ?? '—' }}</td>
+                        <td style="font-size:.85rem;">{{ $payment->feeType?->name ?? 'ï¿½' }}</td>
                         <td>
                             <span class="badge" style="background:rgba(79,70,229,.1);color:#4f46e5;font-size:.72rem;">
                                 {{ ucfirst($payment->payment_mode) }}
                             </span>
                         </td>
-                        <td style="font-weight:700;color:#059669;">?{{ number_format($payment->amount_paid, 2) }}</td>
+                        <td style="font-weight:700;color:#059669;">&#8377;{{ number_format($payment->amount_paid, 2) }}</td>
                         <td>
                             <span class="badge" style="background:#dcfce7;color:#166534;font-size:.72rem;">Paid</span>
                         </td>
@@ -150,7 +150,7 @@
                     <tr style="background:var(--bg);">
                         <td colspan="4" style="font-weight:700;padding:.875rem 1rem;">Total</td>
                         <td style="font-weight:800;color:#059669;font-size:1rem;padding:.875rem 1rem;">
-                            ?{{ number_format($totalToday, 2) }}
+                            &#8377;{{ number_format($totalToday, 2) }}
                         </td>
                         <td colspan="2"></td>
                     </tr>
