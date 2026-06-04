@@ -295,6 +295,38 @@ class AdmissionService
                 $student->update(['user_id' => $studentLoginUser->id]);
             }
 
+            // ── 7. Send Admission Confirmation Email with Login Credentials ──
+            // Sent to the student's email entered during admission.
+            // Contains: admission details + login email + default password.
+            $studentEmail = $data['email'] ?? null;
+            if ($studentEmail && $studentLoginUser) {
+                $defaultPassword = !empty($data['phone']) ? $data['phone'] : $student->admission_number;
+
+                try {
+                    $tenant = \App\Models\Tenant::find($tenantId);
+                    \Illuminate\Support\Facades\Mail::to($studentEmail)
+                        ->send(new \App\Mail\AdmissionConfirmationMail(
+                            $student->load(['branch.course', 'academicYear']),
+                            $tenant,
+                            $studentEmail,
+                            $defaultPassword
+                        ));
+
+                    Log::info('Admission confirmation email sent', [
+                        'student_id'    => $student->id,
+                        'student_email' => $studentEmail,
+                        'admission_no'  => $student->admission_number,
+                    ]);
+                } catch (\Throwable $e) {
+                    // Log but never fail the admission due to email issues
+                    Log::error('Admission confirmation email failed', [
+                        'student_id' => $student->id,
+                        'email'      => $studentEmail,
+                        'error'      => $e->getMessage(),
+                    ]);
+                }
+            }
+
             return $student;
         });
     }
