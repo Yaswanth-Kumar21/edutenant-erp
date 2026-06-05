@@ -1,10 +1,25 @@
-# EduTenant ERP
+<div align="center">
 
-A multi-tenant, role-based institution management platform built with Laravel 13. Each institution (tenant) operates in complete isolation — separate data, separate admin accounts, shared application infrastructure.
+# 🎓 EduTenant ERP
 
-> **Live Demo:** The application is deployed on AWS EC2 (Free Tier).
-> Contact the maintainer to start the instance before testing.
-> Demo credentials are listed in the [Default Accounts](#default-accounts-after-seeding) section.
+**A multi-tenant, role-based institution management platform**
+
+Built with Laravel 13 · PHP 8.4 · MySQL 8 · Deployed on AWS EC2
+
+[![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?style=flat&logo=php)](https://php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-13.9-FF2D20?style=flat&logo=laravel)](https://laravel.com)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql)](https://mysql.com)
+[![AWS](https://img.shields.io/badge/AWS-EC2%20Free%20Tier-FF9900?style=flat&logo=amazonaws)](https://aws.amazon.com)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+</div>
+
+---
+
+> **🚀 Live Demo:** Deployed on AWS EC2 Free Tier.
+> The instance is stopped when not in use to conserve resources.
+> **Contact the maintainer** to start the instance before testing.
+> Demo login credentials are listed in the [Default Accounts](#default-accounts-after-seeding) section.
 
 ---
 
@@ -14,12 +29,13 @@ A multi-tenant, role-based institution management platform built with Laravel 13
 - [Features](#features)
 - [Multi-Tenant Architecture](#multi-tenant-architecture)
 - [Technology Stack](#technology-stack)
-- [Installation](#installation)
+- [Local Installation](#local-installation)
 - [Environment Setup](#environment-setup)
 - [Mail Configuration](#mail-configuration)
 - [Queue Configuration](#queue-configuration)
 - [Database Setup](#database-setup)
 - [Running Locally](#running-locally)
+- [Default Accounts](#default-accounts-after-seeding)
 - [User Roles](#user-roles)
 - [Modules](#modules)
 - [API Reference](#api-reference)
@@ -42,21 +58,21 @@ Designed for:
 
 ## Features
 
-### Institution Management
+### 🏫 Institution Management
 - Multi-tenant architecture with complete data isolation per tenant
 - Super Admin portal for institution onboarding and monitoring
 - Auto-provisioning of College Admin accounts with secure credential delivery
 - Impersonation — Super Admin can log in as any College Admin for support
 - Onboarding progress tracker (5-step checklist per institution)
 
-### Admissions
+### 📋 Admissions
 - Step-by-step admission wizard
 - Auto-generated admission numbers
 - Certificate upload during admission
 - Printable admission receipts (PDF)
 - Guardian / parent detail capture
 
-### Fee Management
+### 💰 Fee Management
 - Fee type and structure configuration per institution
 - Bulk fee assignment across branches
 - Fee collection with receipt generation
@@ -66,20 +82,20 @@ Designed for:
 - Student fee profile with outstanding balance view
 - Excel export of fee payments
 
-### Student Portal
+### 🎓 Student Portal
 - Personal dashboard with fee and attendance summary
 - Fee history and receipt download
 - Attendance calendar view
 - Certificate download
 - Profile and password management
 
-### Attendance
+### 📅 Attendance
 - Student attendance marking by branch and date
 - Staff attendance tracking
 - Monthly reports and analytics
 - Low-attendance alert emails
 
-### Staff & Payroll
+### 👨‍💼 Staff & Payroll
 - Staff profile management
 - Role assignment
 - Leave requests with approval/rejection workflow
@@ -87,18 +103,18 @@ Designed for:
 - Payroll slip PDF generation
 - Excel payroll export
 
-### Reports
+### 📊 Reports
 - Daily collection report
 - Annual financial summary
 - Student-wise reports
 - Fee collection analytics
 
-### Notifications
+### 🔔 Notifications
 - Email dispatch for admissions, fee receipts, payroll, attendance alerts
 - Queue-based async delivery for bulk notifications
 - Email delivery logs with status tracking
 
-### API (Mobile)
+### 📱 API (Mobile)
 - Sanctum token authentication
 - Student dashboard, fees, attendance, notifications endpoints
 - Tenant-isolated data access
@@ -134,33 +150,35 @@ Super Admin
 
 ## Technology Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Laravel 13.9 |
-| PHP | 8.4 |
-| Database | MySQL 8 |
-| Auth | Laravel Breeze + Sanctum (API) |
-| Mail | Brevo SMTP (smtp-relay.brevo.com:587) |
-| PDF | barryvdh/laravel-dompdf 3.1 |
-| Excel | maatwebsite/excel 3.1 |
-| Payments | Razorpay SDK 2.9 |
-| Queue | Database driver |
-| Assets | Vite + Bootstrap |
-| Server | Nginx + PHP-FPM |
-| Queue Manager | Supervisor |
-| Cloud | AWS EC2 (t3.micro, eu-north-1) |
+| Layer | Technology | Version |
+|---|---|---|
+| Framework | Laravel | 13.9 |
+| Language | PHP | 8.4 |
+| Database | MySQL | 8.0 |
+| Authentication | Laravel Breeze + Sanctum | — |
+| Mail | Brevo SMTP | smtp-relay.brevo.com:587 |
+| PDF Generation | barryvdh/laravel-dompdf | 3.1 |
+| Excel Export | maatwebsite/excel | 3.1 |
+| Payments | Razorpay SDK | 2.9 |
+| Queue Driver | Database | — |
+| Frontend Assets | Vite + Bootstrap | — |
+| Web Server | Nginx + PHP-FPM | 1.24 |
+| Process Manager | Supervisor | 4.x |
+| Cloud Platform | AWS EC2 | t3.micro, eu-north-1 |
 
 ---
 
-## Installation
+## Local Installation
 
 ### Requirements
 
-- PHP 8.4+
-- MySQL 8.0+
-- Composer 2.x
-- Node.js 20+ and npm
-- A Brevo account (free — 300 emails/day)
+| Tool | Version |
+|---|---|
+| PHP | 8.4+ |
+| MySQL | 8.0+ |
+| Composer | 2.x |
+| Node.js | 20+ |
+| npm | 10+ |
 
 ### Quick Start
 
@@ -169,32 +187,34 @@ Super Admin
 git clone https://github.com/Yaswanth-Kumar21/edutenant-erp.git
 cd edutenant-erp
 
-# 2. Install dependencies
+# 2. Install PHP dependencies
 composer install
+
+# 3. Install Node dependencies
 npm install
 
-# 3. Copy environment file
+# 4. Copy environment file
 cp .env.example .env
 
-# 4. Generate application key
+# 5. Generate application key
 php artisan key:generate
 
-# 5. Configure your .env (see Environment Setup below)
+# 6. Configure your .env (database, mail — see Environment Setup below)
 
-# 6. Run migrations
+# 7. Run database migrations
 php artisan migrate
 
-# 7. Seed initial data (roles + super admin + demo colleges)
+# 8. Seed demo data (roles + super admin + demo colleges)
 php artisan db:seed
 
-# 8. Build frontend assets
+# 9. Build frontend assets
 npm run build
 
-# 9. Start the server
+# 10. Start the development server
 php artisan serve
 ```
 
-Or use the built-in setup script:
+Or run everything in one command:
 
 ```bash
 composer run setup
@@ -204,14 +224,14 @@ composer run setup
 
 ## Environment Setup
 
-Copy `.env.example` to `.env` and update the values below.
+Copy `.env.example` to `.env` and fill in your values.
 
-> **Never commit your `.env` file to version control. It is listed in `.gitignore`.**
+> ⚠️ **Never commit your `.env` file to version control. It is already listed in `.gitignore`.**
 
 ```dotenv
 APP_NAME="EduTenant ERP"
 APP_ENV=local
-APP_KEY=                    # generated by php artisan key:generate
+APP_KEY=                        # auto-generated by php artisan key:generate
 APP_DEBUG=true
 APP_URL=http://localhost:8000
 
@@ -219,10 +239,10 @@ DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=edutenant_erp
-DB_USERNAME=your_db_username
-DB_PASSWORD=your_db_password
+DB_USERNAME=your_db_username    # replace with your MySQL username
+DB_PASSWORD=your_db_password    # replace with your MySQL password
 
-QUEUE_CONNECTION=database   # required for async email notifications
+QUEUE_CONNECTION=database       # required for async email notifications
 
 SESSION_DRIVER=database
 CACHE_STORE=database
@@ -232,7 +252,7 @@ CACHE_STORE=database
 
 ## Mail Configuration
 
-EduTenant uses **Brevo SMTP** for email delivery. Brevo provides 300 free emails/day with no credit card.
+EduTenant uses **Brevo SMTP** for email delivery. Brevo provides 300 free emails/day with no credit card required.
 
 ### Setup Brevo
 
@@ -248,12 +268,12 @@ MAIL_MAILER=smtp
 MAIL_HOST=smtp-relay.brevo.com
 MAIL_PORT=587
 MAIL_USERNAME=your_brevo_login@email.com
-MAIL_PASSWORD=your_brevo_smtp_key        # keep this secret
+MAIL_PASSWORD=your_brevo_smtp_key       # ⚠️ keep this secret — never commit
 MAIL_FROM_ADDRESS="noreply@yourdomain.com"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-> `MAIL_FROM_ADDRESS` must match a verified sender in your Brevo account.
+> `MAIL_FROM_ADDRESS` must match a verified sender address in your Brevo account.
 
 ### Email Delivery Flow
 
@@ -267,11 +287,13 @@ TenantController::store()
           → email_logs table updated with status: sent / failed
 ```
 
+All institution welcome emails are sent **synchronously** so delivery status is immediately visible on the institution detail page.
+
 ---
 
 ## Queue Configuration
 
-Attendance alerts, fee receipts, and payroll notifications are sent asynchronously via the database queue.
+Attendance alerts, fee receipts, and payroll notifications are sent asynchronously via the database queue driver.
 
 ```dotenv
 QUEUE_CONNECTION=database
@@ -280,10 +302,10 @@ QUEUE_CONNECTION=database
 ### Running the queue worker
 
 ```bash
-# Development
+# Development — auto-restarts on failure
 php artisan queue:listen --tries=3 --timeout=60
 
-# Production (use Supervisor — see AWS Deployment section)
+# Production — use Supervisor (see AWS Deployment section)
 php artisan queue:work --sleep=3 --tries=3 --max-time=3600
 ```
 
@@ -293,7 +315,7 @@ php artisan queue:work --sleep=3 --tries=3 --max-time=3600
 
 ### Schema Overview
 
-38 migrations covering:
+38 migrations across 8 functional groups:
 
 | Group | Tables |
 |---|---|
@@ -306,16 +328,16 @@ php artisan queue:work --sleep=3 --tries=3 --max-time=3600
 | Messaging | `messages`, `notifications`, `email_logs` |
 | System | `password_histories`, `impersonation_logs`, `jobs`, `failed_jobs`, `cache`, `personal_access_tokens` |
 
-### Fresh install
+### Commands
 
 ```bash
+# Run all migrations
 php artisan migrate
+
+# Seed demo data
 php artisan db:seed
-```
 
-### Reset (development only)
-
-```bash
+# Full reset (development only — destroys all data)
 php artisan migrate:fresh --seed
 ```
 
@@ -327,23 +349,29 @@ php artisan migrate:fresh --seed
 composer run dev
 ```
 
-This starts concurrently:
-- `php artisan serve` — web server on :8000
-- `php artisan queue:listen` — processes async email jobs
-- `php artisan pail` — real-time log viewer
-- `npm run dev` — Vite asset watcher
+This starts four processes concurrently:
 
-### Default Accounts (after seeding)
+| Process | Command | Purpose |
+|---|---|---|
+| Web server | `php artisan serve` | HTTP on port 8000 |
+| Queue worker | `php artisan queue:listen` | Processes async emails |
+| Log viewer | `php artisan pail` | Real-time log output |
+| Asset watcher | `npm run dev` | Vite hot reload |
 
-> These are demo accounts for testing only. **Change all passwords before going to production.**
+---
 
-#### Super Admin
+## Default Accounts (after seeding)
+
+> ⚠️ These are **demo accounts for testing only**.
+> Change all passwords before using in production.
+
+### Super Admin
 
 | Role | Email | Password |
 |---|---|---|
 | Super Admin | `superadmin@erp.com` | `password` |
 
-#### College 1 — Sri Venkateswara Degree College (Tirupati)
+### College 1 — Sri Venkateswara Degree College (Tirupati)
 
 | Role | Email | Password |
 |---|---|---|
@@ -358,7 +386,7 @@ This starts concurrently:
 | Student | `pooja.sharma@svc.student.edu` | `81svc0004` |
 | Student | `aakash.kumar@svc.student.edu` | `81svc0005` |
 
-#### College 2 — Sai Chaitanya Degree College (Vijayawada)
+### College 2 — Sai Chaitanya Degree College (Vijayawada)
 
 | Role | Email | Password |
 |---|---|---|
@@ -369,7 +397,7 @@ This starts concurrently:
 | Student | `sravani.reddy@scc.student.edu` | `81scc0002` |
 | Student | `mahesh.babu@scc.student.edu` | `81scc0003` |
 
-> Student password format: `81{college-slug}{sequence-number}`
+> **Student password format:** `81{college-slug}{sequence}` — e.g. `81svc0001`
 
 ---
 
@@ -409,140 +437,189 @@ This starts concurrently:
 
 ## Modules
 
-### Institution Management (`/super-admin/tenants`)
-Create and manage institutions. Each creation auto-provisions a College Admin account and sends welcome email with temporary credentials.
-
-### Admissions (`/admin/admissions`)
-Multi-step admission form with certificate upload. Generates unique admission numbers and printable receipts.
-
-### Fee Management (`/admin/fees`)
-Configure fee types and semester-wise structures. Collect payments, generate receipts, handle exemptions, and manage transport fees. Razorpay integration for online payment.
-
-### Scholarship Management (`/admin/scholarships`)
-Create and assign scholarships to students with discount tracking.
-
-### Student Portal (`/student/dashboard`)
-Self-service portal for enrolled students. View fees, download receipts, check attendance, download certificates.
-
-### Attendance (`/admin/attendance`)
-Mark student and staff attendance. Monthly reports and analytics with branch-wise breakdowns.
-
-### Staff & Payroll (`/admin/staff`, `/admin/payroll`)
-Staff profiles, role assignment, leave management, monthly payroll processing with PDF slip generation.
-
-### Finance (`/admin/expenses`, `/admin/incomes`)
-Track institutional income and expenses by category. Excel export.
-
-### Reports (`/admin/reports`)
-Daily, annual, student, and fee collection reports.
-
-### Notifications (`/admin/messages`)
-Send email messages to students by branch or individually.
+| Module | Route | Description |
+|---|---|---|
+| Institution Management | `/super-admin/tenants` | Create and manage institutions with auto College Admin provisioning |
+| Admissions | `/admin/admissions` | Multi-step form with certificate upload and printable receipts |
+| Fee Management | `/admin/fees` | Fee structures, collection, receipts, exemptions, Razorpay online payment |
+| Scholarships | `/admin/scholarships` | Create and assign scholarships with discount tracking |
+| Student Portal | `/student/dashboard` | Self-service portal — fees, attendance, certificates |
+| Attendance | `/admin/attendance` | Student and staff attendance with monthly analytics |
+| Staff & Payroll | `/admin/staff`, `/admin/payroll` | Profiles, leave management, payroll PDF generation |
+| Finance | `/admin/expenses`, `/admin/incomes` | Income and expense tracking by category |
+| Reports | `/admin/reports` | Daily, annual, student, and fee collection reports |
+| Notifications | `/admin/messages` | Email messages to students by branch or individually |
 
 ---
 
 ## API Reference
 
-Base URL: `/api/v1/`
-Authentication: Bearer token (Sanctum)
+**Base URL:** `/api/v1/`
+**Authentication:** Bearer token via Laravel Sanctum
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/v1/login` | Authenticate, receive Bearer token |
-| `POST` | `/api/v1/logout` | Revoke current token |
-| `GET` | `/api/v1/me` | Authenticated user profile |
-| `GET` | `/api/v1/student/dashboard` | Student dashboard stats |
-| `GET` | `/api/v1/student/fees` | Fee payment history |
-| `GET` | `/api/v1/student/attendance` | Attendance records |
-| `GET` | `/api/v1/student/notifications` | Fee alerts + messages |
+```
+POST /api/v1/login     → returns Bearer token
+Authorization: Bearer {token}
+```
 
-Tokens expire after 30 days. Student endpoints require `role:student` middleware.
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/v1/login` | No | Authenticate, receive Bearer token |
+| `POST` | `/api/v1/logout` | Yes | Revoke current token |
+| `GET` | `/api/v1/me` | Yes | Authenticated user profile |
+| `GET` | `/api/v1/student/dashboard` | Yes | Student dashboard stats |
+| `GET` | `/api/v1/student/fees` | Yes | Fee payment history |
+| `GET` | `/api/v1/student/attendance` | Yes | Attendance records |
+| `GET` | `/api/v1/student/notifications` | Yes | Fee alerts and messages |
+
+- Tokens expire after **30 days**
+- Student endpoints require `role:student` middleware
+- All responses are tenant-scoped
 
 ---
 
 ## AWS Deployment
 
-The application is deployed on **AWS EC2 Free Tier** in the `eu-north-1` (Stockholm) region.
+The application is deployed on **AWS EC2 Free Tier** (`eu-north-1` — Stockholm region).
 
-### Infrastructure
+### Infrastructure Overview
 
 | Component | Details |
 |---|---|
-| Server | AWS EC2 t3.micro (1 vCPU, 1GB RAM) |
-| OS | Ubuntu 24.04 LTS |
-| Web Server | Nginx 1.24 |
-| PHP | 8.4 (php8.4-fpm) |
-| Database | MySQL 8 (local, same instance) |
+| Cloud Provider | AWS EC2 Free Tier |
+| Instance Type | t3.micro (1 vCPU, 1GB RAM) |
+| Operating System | Ubuntu 24.04 LTS |
+| Region | eu-north-1 (Stockholm) |
+| Web Server | Nginx 1.24 + PHP-FPM 8.4 |
+| Database | MySQL 8 (on same instance) |
 | Storage | 30GB gp3 EBS volume |
-| IP | Elastic IP (static, persists on restart) |
-| Queue | Supervisor-managed queue:work |
-| Scheduler | Crontab — runs every minute |
+| Network | Elastic IP (static — persists on restart) |
+| Queue Manager | Supervisor (auto-restart on crash) |
+| Scheduler | Crontab — every minute |
+| Security Group | SSH (My IP only), HTTP/HTTPS (public) |
 
-### Server Setup Summary
+---
 
-#### 1. System packages
+### Step-by-Step Deployment Guide
+
+#### Step 1 — Launch EC2 Instance
+
+1. Go to **AWS Console → EC2 → Launch Instance**
+2. Select **Ubuntu 24.04 LTS** (Free tier eligible)
+3. Choose **t3.micro** instance type
+4. Create a new key pair (`.pem` file) — save it securely
+5. Configure security group:
+
+| Port | Source | Purpose |
+|---|---|---|
+| 22 | Your IP only | SSH |
+| 80 | 0.0.0.0/0 | HTTP |
+| 443 | 0.0.0.0/0 | HTTPS |
+
+6. Set storage to **30 GiB gp3**
+7. Launch and allocate an **Elastic IP** — associate it with the instance
+
+#### Step 2 — Connect via SSH
+
 ```bash
-sudo apt update && sudo apt upgrade -y
-sudo add-apt-repository ppa:ondrej/php -y
-sudo apt install -y php8.4 php8.4-fpm php8.4-mysql php8.4-xml \
-  php8.4-mbstring php8.4-curl php8.4-zip php8.4-gd php8.4-bcmath \
-  php8.4-intl php8.4-tokenizer php8.4-cli nginx mysql-server supervisor
+# Fix key permissions (Windows)
+icacls "edutenant-key.pem" /inheritance:r /grant:r "YourUsername:R"
+
+# Connect
+ssh -i "edutenant-key.pem" ubuntu@YOUR_ELASTIC_IP
 ```
 
-#### 2. Node.js and Composer
+#### Step 3 — Install System Dependencies
+
 ```bash
+sudo apt update && sudo apt upgrade -y
+sudo reboot
+# reconnect after reboot
+
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt update
+sudo apt install -y php8.4 php8.4-fpm php8.4-mysql php8.4-xml \
+  php8.4-mbstring php8.4-curl php8.4-zip php8.4-gd php8.4-bcmath \
+  php8.4-intl php8.4-tokenizer php8.4-cli nginx mysql-server supervisor git
+
+# Node.js 20
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt install -y nodejs
+
+# Composer
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 ```
 
-#### 3. Clone and install
+#### Step 4 — Configure MySQL
+
 ```bash
-git clone https://github.com/Yaswanth-Kumar21/edutenant-erp.git /var/www/college-erp
-cd /var/www/college-erp
-composer install --no-dev --optimize-autoloader
-npm install && npm run build
+sudo mysql_secure_installation   # answer prompts to secure MySQL
+
+sudo mysql
 ```
 
-#### 4. Environment configuration
+```sql
+CREATE DATABASE edutenant_erp;
+CREATE USER 'your_db_user'@'localhost' IDENTIFIED BY 'your_strong_password';
+GRANT ALL PRIVILEGES ON edutenant_erp.* TO 'your_db_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+#### Step 5 — Clone and Install Project
+
+```bash
+sudo mkdir -p /var/www/college-erp
+sudo chown ubuntu:ubuntu /var/www/college-erp
+git clone https://github.com/Yaswanth-Kumar21/edutenant-erp.git /var/www/college-erp
+cd /var/www/college-erp
+
+composer install --no-dev --optimize-autoloader
+npm install
+npm run build
+```
+
+#### Step 6 — Configure Environment
+
 ```bash
 cp .env.example .env
-# Edit .env with production values — never expose real credentials in README
+# Edit .env — set DB credentials, APP_URL, mail settings
+# Never expose actual passwords in README or version control
 php artisan key:generate
 ```
 
-**Production `.env` checklist:**
+**Key production `.env` values:**
+
 ```dotenv
 APP_ENV=production
 APP_DEBUG=false
-APP_URL=http://your-server-ip-or-domain
+APP_URL=http://your-elastic-ip
 
 DB_DATABASE=edutenant_erp
-DB_USERNAME=<your_db_user>        # do not hardcode here
-DB_PASSWORD=<your_db_password>    # do not hardcode here
+DB_USERNAME=your_db_user        # use placeholder in docs
+DB_PASSWORD=your_db_password    # use placeholder in docs
 
 SESSION_DRIVER=database
 CACHE_STORE=database
 QUEUE_CONNECTION=database
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp-relay.brevo.com
+MAIL_PORT=587
+MAIL_USERNAME=your_brevo_username
+MAIL_PASSWORD=your_brevo_smtp_key
 ```
 
-#### 5. Database
-```bash
-# Create database and user (run inside mysql)
-sudo mysql
-CREATE DATABASE edutenant_erp;
-CREATE USER 'your_user'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL PRIVILEGES ON edutenant_erp.* TO 'your_user'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
+#### Step 7 — Migrate and Seed
 
-# Run migrations and seed
+```bash
 php artisan migrate --force
 php artisan db:seed --force
 ```
 
-#### 6. Storage permissions
+#### Step 8 — Storage Permissions
+
 ```bash
 sudo usermod -a -G www-data ubuntu
 sudo chown -R ubuntu:www-data /var/www/college-erp/storage
@@ -552,20 +629,22 @@ sudo chmod -R 775 /var/www/college-erp/bootstrap/cache
 php artisan storage:link
 ```
 
-#### 7. Laravel caching
+#### Step 9 — Cache for Performance
+
 ```bash
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 ```
 
-#### 8. Nginx configuration
+#### Step 10 — Nginx Configuration
+
 Create `/etc/nginx/sites-available/college-erp`:
 
 ```nginx
 server {
     listen 80;
-    server_name your-server-ip-or-domain;
+    server_name your-elastic-ip-or-domain;
     root /var/www/college-erp/public;
     index index.php;
 
@@ -577,10 +656,16 @@ server {
         try_files $uri $uri/ /index.php?$query_string;
     }
 
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
     location ~ \.php$ {
         fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
+        fastcgi_hide_header X-Powered-By;
     }
 
     location ~ /\.(?!well-known).* {
@@ -593,9 +678,11 @@ server {
 sudo ln -s /etc/nginx/sites-available/college-erp /etc/nginx/sites-enabled/
 sudo rm /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
+sudo systemctl enable nginx
 ```
 
-#### 9. Supervisor (queue worker)
+#### Step 11 — Supervisor (Queue Worker)
+
 Create `/etc/supervisor/conf.d/edutenant-queue.conf`:
 
 ```ini
@@ -611,71 +698,74 @@ stdout_logfile=/var/log/edutenant-queue.log
 ```
 
 ```bash
-sudo supervisorctl reread && sudo supervisorctl update
+sudo supervisorctl reread
+sudo supervisorctl update
 sudo supervisorctl start edutenant-queue
+sudo supervisorctl status
 ```
 
-#### 10. Cron scheduler
+#### Step 12 — Cron Scheduler
+
 ```bash
 (crontab -l 2>/dev/null; echo "* * * * * cd /var/www/college-erp && php artisan schedule:run >> /dev/null 2>&1") | crontab -
 ```
 
-### SSL (HTTPS) — optional
+---
 
-To enable HTTPS with a domain name:
+### SSL with Let's Encrypt (requires a domain name)
 
 ```bash
 sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d yourdomain.com
+sudo systemctl reload nginx
 ```
 
-Then update `APP_URL` in `.env` and re-enable `URL::forceScheme('https')` in `AppServiceProvider.php`.
+Then:
+- Update `APP_URL=https://yourdomain.com` in `.env`
+- Re-enable `URL::forceScheme('https')` in `app/Providers/AppServiceProvider.php`
+- Run `php artisan config:cache`
 
-### AWS Security Group — required ports
+---
 
-| Port | Protocol | Source | Purpose |
-|---|---|---|---|
-| 22 | TCP | Your IP only | SSH access |
-| 80 | TCP | 0.0.0.0/0 | HTTP |
-| 443 | TCP | 0.0.0.0/0 | HTTPS |
+### Managing the EC2 Instance
 
-> **Security note:** Restrict port 22 to your IP only. Never open SSH to 0.0.0.0/0.
+The instance is **stopped when not in use** to conserve AWS credits.
 
-### Instance management
-
-The EC2 instance is stopped when not in use to conserve credits.
-
-**To start the server:**
+**Start the server (when needed for testing):**
 ```
-AWS Console → EC2 → Instances → edutenant-server → Instance state → Start
+AWS Console → EC2 → Instances → edutenant-server → Instance state → Start instance
 ```
-Wait ~1 minute for the instance to boot. All services (Nginx, PHP-FPM, MySQL, Supervisor) start automatically.
+Wait ~60 seconds. All services start automatically on boot.
 
-**To stop the server:**
+**Stop the server:**
 ```
-AWS Console → EC2 → Instances → edutenant-server → Instance state → Stop
+AWS Console → EC2 → Instances → edutenant-server → Instance state → Stop instance
 ```
 
-> All data, code, and configuration is preserved on the EBS volume when stopped.
+> ✅ All data, code, database, and configuration is safely preserved on the EBS volume.
+> ❌ Never click **Terminate** — that permanently deletes everything.
 
 ---
 
 ## Security Features
 
-- **Tenant isolation** — every query scoped to `tenant_id`; `TenantScoped::assertTenant()` enforces ownership on every model operation
-- **Forced password change** — College Admins must change temporary password on first login (`must_change_password` flag + `ForcePasswordChange` middleware)
-- **Password history** — stored in `password_histories` table (hashed, never plain text)
-- **Impersonation audit** — every Super Admin impersonation logged in `impersonation_logs` with IP, start time, and end time
-- **Email logs** — all outbound emails recorded in `email_logs` with delivery status and error messages
-- **Razorpay signature verification** — payment webhook and callback signatures verified with `hash_hmac`
-- **API token scoping** — Sanctum tokens limited to 30-day TTL; revoked on logout
-- **Public registration disabled in production** — `RegisteredUserController` returns 403 when `APP_ENV=production`
-- **SSH access restricted** — security group limits port 22 to known IP only
-- **No secrets in repository** — `.env` is gitignored; all credentials managed via environment variables
+| Feature | Implementation |
+|---|---|
+| Tenant isolation | Every query scoped to `tenant_id`; `TenantScoped::assertTenant()` on every model |
+| Forced password change | College Admins must change temp password on first login (`must_change_password` flag) |
+| Password history | Hashed and stored in `password_histories` — prevents reuse |
+| Impersonation audit | Every Super Admin impersonation logged with IP, start, and end time |
+| Email logs | All outbound emails recorded with delivery status and error details |
+| Razorpay verification | Payment signatures verified with `hash_hmac` on webhook and callback |
+| API token scoping | Sanctum tokens expire after 30 days; revoked on logout |
+| No public registration | `RegisteredUserController` returns 403 in production |
+| SSH restriction | Port 22 limited to known IP in security group |
+| No secrets in repo | `.env` is gitignored; all credentials via environment variables |
+| HTTPS enforcement | `URL::forceScheme('https')` active in production (requires SSL cert) |
 
 ### Files excluded from version control
 
-```
+```gitignore
 /vendor/
 /node_modules/
 .env
@@ -686,6 +776,8 @@ AWS Console → EC2 → Instances → edutenant-server → Instance state → St
 /public/build/
 /public/hot
 .phpunit.cache/
+.DS_Store
+Thumbs.db
 ```
 
 ---
@@ -696,4 +788,10 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-*EduTenant ERP — Built with Laravel 13 · PHP 8.4 · MySQL 8 · Deployed on AWS EC2*
+<div align="center">
+
+*EduTenant ERP — Built with ❤️ using Laravel 13 · PHP 8.4 · MySQL 8*
+
+*Deployed on AWS EC2 Free Tier · eu-north-1 (Stockholm)*
+
+</div>
