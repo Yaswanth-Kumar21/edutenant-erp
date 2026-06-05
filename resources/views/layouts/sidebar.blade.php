@@ -150,6 +150,9 @@
             <a href="{{ route('admin.incomes.index') }}" class="sidebar-link {{ request()->routeIs('admin.incomes*') ? 'active' : '' }}">
                 <i class="fa-solid fa-arrow-trend-up sidebar-icon"></i><span class="sidebar-label">Income</span>
             </a>
+            <a href="{{ route('admin.payment-register.index') }}" class="sidebar-link {{ request()->routeIs('admin.payment-register*') ? 'active' : '' }}">
+                <i class="fa-solid fa-book-open sidebar-icon"></i><span class="sidebar-label">Payments Register</span>
+            </a>
 
             <div class="sidebar-section mt-1">Operations</div>
 

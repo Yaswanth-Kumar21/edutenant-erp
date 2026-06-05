@@ -13,12 +13,13 @@ use App\Http\Controllers\Admin\NotificationDispatchController;
 
 // ── Excel / CSV Exports ───────────────────────────────────────────────────────
 Route::prefix('exports')->name('exports.')->group(function () {
-    Route::get('students',     [ExportController::class, 'students'])->name('students');
-    Route::get('fee-payments', [ExportController::class, 'feePayments'])->name('fee-payments');
-    Route::get('attendance',   [ExportController::class, 'attendance'])->name('attendance');
-    Route::get('payroll',      [ExportController::class, 'payroll'])->name('payroll');
-    Route::get('expenses',     [ExportController::class, 'expenses'])->name('expenses');
-    Route::get('income',       [ExportController::class, 'income'])->name('income');
+    Route::get('students',          [ExportController::class, 'students'])->name('students');
+    Route::get('fee-payments',      [ExportController::class, 'feePayments'])->name('fee-payments');
+    Route::get('attendance',        [ExportController::class, 'attendance'])->name('attendance');
+    Route::get('payroll',           [ExportController::class, 'payroll'])->name('payroll');
+    Route::get('expenses',          [ExportController::class, 'expenses'])->name('expenses');
+    Route::get('income',            [ExportController::class, 'income'])->name('income');
+    Route::get('payment-register',  [ExportController::class, 'paymentRegister'])->name('payment-register');
 });
 
 // ── PDF Downloads ─────────────────────────────────────────────────────────────

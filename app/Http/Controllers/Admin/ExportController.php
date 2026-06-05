@@ -6,6 +6,7 @@ use App\Exports\AttendanceExport;
 use App\Exports\ExpensesExport;
 use App\Exports\FeePaymentsExport;
 use App\Exports\IncomeExport;
+use App\Exports\PaymentRegisterExport;
 use App\Exports\PayrollExport;
 use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
@@ -121,6 +122,24 @@ class ExportController extends Controller
             tenantId: $tenantId,
             dateFrom: $request->date_from,
             dateTo:   $request->date_to
+        );
+
+        return $format === 'csv'
+            ? Excel::download($export, "{$filename}.csv", \Maatwebsite\Excel\Excel::CSV)
+            : Excel::download($export, "{$filename}.xlsx");
+    }
+
+    public function paymentRegister(Request $request)
+    {
+        $tenantId = $this->tenantId();
+        $format   = $request->get('format', 'xlsx');
+        $filename = 'payment-register-' . now()->format('Y-m-d');
+
+        $export = new PaymentRegisterExport(
+            tenantId:       $tenantId,
+            academicYearId: $request->academic_year_id,
+            dateFrom:       $request->date_from,
+            dateTo:         $request->date_to
         );
 
         return $format === 'csv'
