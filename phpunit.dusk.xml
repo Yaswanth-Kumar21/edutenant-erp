@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         stopOnFailure="false"
+>
+    <testsuites>
+        <testsuite name="Browser">
+            <directory>tests/Browser</directory>
+        </testsuite>
+    </testsuites>
+
+    <php>
+        <env name="APP_ENV"       value="local"/>
+        <env name="APP_URL"       value="http://13.62.14.215"/>
+        <env name="DUSK_DRIVER_URL" value="http://localhost:9515"/>
+    </php>
+</phpunit>
