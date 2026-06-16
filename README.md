@@ -782,6 +782,80 @@ Thumbs.db
 
 ---
 
+## Automated Testing — Laravel Dusk
+
+This project includes a full suite of end-to-end browser tests built with **Laravel Dusk v8.6.0**, covering the **Admissions** and **Student Dashboard** modules.
+
+### Test Results
+
+| Metric | Value |
+|---|---|
+| Total Tests | 41 |
+| Passed | ✅ 41 |
+| Failed | 0 |
+| Assertions | 78 |
+| Browser | Chrome 149 (Headless) |
+| Target URL | http://13.62.14.215 |
+
+### Test Structure
+
+```
+tests/Browser/
+├── Auth/
+│   ├── SuperAdminLoginTest.php       # TC-01 to TC-04
+│   ├── CollegeAdminLoginTest.php     # TC-05 to TC-07
+│   └── StudentLoginTest.php          # TC-08 to TC-10
+├── Admissions/
+│   ├── AdmissionCreationTest.php     # TC-11 to TC-13  (7-step wizard)
+│   ├── StudentListTest.php           # TC-14 to TC-17
+│   └── AdmissionDatabaseTest.php     # TC-DB-01 to TC-DB-03
+└── Student/
+    ├── StudentDashboardTest.php      # TC-18 to TC-22
+    ├── StudentProfileTest.php        # TC-23 to TC-26
+    ├── StudentAttendanceTest.php     # TC-27 to TC-30
+    ├── StudentScholarshipTest.php    # TC-31 to TC-34
+    └── StudentDatabaseTest.php       # TC-DB-04 to TC-DB-10
+```
+
+### Running the Tests
+
+```bash
+# Prerequisites — EC2 instance must be running at http://13.62.14.215
+
+# Run all Dusk tests
+php artisan dusk
+
+# Run a specific module
+php artisan dusk tests/Browser/Auth/
+php artisan dusk tests/Browser/Admissions/
+php artisan dusk tests/Browser/Student/
+
+# Run a single test file
+php artisan dusk tests/Browser/Auth/SuperAdminLoginTest.php
+
+# Run with visible browser (disable headless)
+# Set DUSK_HEADLESS_DISABLED=true in .env.dusk.local first
+php artisan dusk
+```
+
+### Configuration Files
+
+| File | Purpose |
+|---|---|
+| `.env.dusk.local` | Sets `APP_URL=http://13.62.14.215` for browser tests |
+| `phpunit.dusk.xml` | Separate PHPUnit config pointing to `tests/Browser/` |
+| `tests/DuskTestCase.php` | Base class — starts ChromeDriver on port 9515 |
+
+### Reports
+
+| File | Description |
+|---|---|
+| `TESTING_REPORT.md` | Full test results, bug fixes, screenshots index |
+| `LARAVEL_DUSK_NOTES.md` | Internship learning notes — what Dusk is and how it works |
+| `INTERNSHIP_REPORT.html` | Print-ready report — open in Chrome and Save as PDF |
+
+---
+
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
