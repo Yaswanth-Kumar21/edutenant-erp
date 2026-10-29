@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────────────────────────────────────
-# Stage 1 — Node: compile frontend assets (Vite build)
+# Stage 1 — Node: compile frontend assets
 # ────────────────────────────────────────────────────────────────────────────
 FROM node:20-alpine AS node-builder
 
@@ -10,27 +10,25 @@ COPY . .
 RUN npm run build
 
 # ────────────────────────────────────────────────────────────────────────────
-# Stage 2 — PHP: production image
+# Stage 2 — PHP on Debian (more reliable library support than Alpine)
 # ────────────────────────────────────────────────────────────────────────────
-FROM php:8.4-fpm-alpine
+FROM php:8.4-fpm-bookworm
 
-# System packages
-RUN apk add --no-cache \
+# System packages (Debian bookworm)
+RUN apt-get update && apt-get install -y --no-install-recommends \
         nginx \
         supervisor \
-        postgresql-client \
         libpq-dev \
         libpng-dev \
-        libjpeg-turbo-dev \
-        freetype-dev \
+        libjpeg-dev \
+        libfreetype6-dev \
         libzip-dev \
+        libonig-dev \
+        libicu-dev \
         zip \
         unzip \
         git \
         curl \
-        oniguruma-dev \
-        icu-dev \
-        shadow \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
         pdo_pgsql \
@@ -42,14 +40,16 @@ RUN apk add --no-cache \
         gd \
         zip \
         intl \
-        opcache
+        opcache \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Install PHP dependencies (no dev, optimized)
+# Install PHP dependencies
 COPY composer.json composer.lock ./
 RUN composer install \
         --no-dev \
@@ -64,14 +64,13 @@ COPY . .
 # Copy compiled frontend assets from node stage
 COPY --from=node-builder /app/public/build ./public/build
 
-# Create a .env so artisan commands don't fail during build
-# (real values come from Render environment variables at runtime)
+# Create a minimal .env so artisan doesn't crash during build
 RUN cp .env.example .env 2>/dev/null || echo "APP_KEY=" > .env
 
 # Run composer post-install hooks
 RUN composer run-script post-autoload-dump --no-interaction 2>/dev/null || true
 
-# Ensure storage and cache dirs exist with correct permissions
+# Storage & permissions
 RUN mkdir -p storage/framework/{sessions,views,cache/data} \
              storage/logs \
              storage/app/public \
@@ -79,15 +78,13 @@ RUN mkdir -p storage/framework/{sessions,views,cache/data} \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 storage bootstrap/cache
 
-# Copy runtime config files
-COPY docker/nginx.conf      /etc/nginx/nginx.conf
+# Copy runtime config
+COPY docker/nginx.conf       /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY docker/php.ini         /usr/local/etc/php/conf.d/custom.ini
-COPY docker/start.sh        /start.sh
+COPY docker/php.ini          /usr/local/etc/php/conf.d/custom.ini
+COPY docker/start.sh         /start.sh
 RUN chmod +x /start.sh
 
-# Render free tier uses port 10000 by default
-# (nginx.conf listens on PORT env var; defaults to 10000)
 EXPOSE 10000
 
 CMD ["/start.sh"]
