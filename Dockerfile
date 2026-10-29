@@ -1,41 +1,91 @@
-FROM php:8.4-apache
+# ────────────────────────────────────────────────────────────────────────────
+# Stage 1 — Node: compile frontend assets (Vite build)
+# ────────────────────────────────────────────────────────────────────────────
+FROM node:20-alpine AS node-builder
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git curl libpng-dev libonig-dev libxml2-dev zip unzip \
-    libzip-dev libfreetype6-dev libjpeg62-turbo-dev \
-    libpq-dev nodejs npm \
-    && docker-php-ext-install pdo_mysql pdo_pgsql pgsql mbstring exif pcntl bcmath gd zip \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --ignore-scripts
+COPY . .
+RUN npm run build
+
+# ────────────────────────────────────────────────────────────────────────────
+# Stage 2 — PHP: production image
+# ────────────────────────────────────────────────────────────────────────────
+FROM php:8.4-fpm-alpine
+
+# System packages
+RUN apk add --no-cache \
+        nginx \
+        supervisor \
+        mysql-client \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        freetype-dev \
+        libzip-dev \
+        zip \
+        unzip \
+        git \
+        curl \
+        oniguruma-dev \
+        icu-dev \
+        shadow \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
+        pdo_mysql \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        gd \
+        zip \
+        intl \
+        opcache
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set working directory
 WORKDIR /var/www/html
 
-# Copy project files
+# Install PHP dependencies (no dev, optimized)
+COPY composer.json composer.lock ./
+RUN composer install \
+        --no-dev \
+        --optimize-autoloader \
+        --no-scripts \
+        --no-interaction \
+        --prefer-dist
+
+# Copy full application
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Copy compiled frontend assets from node stage
+COPY --from=node-builder /app/public/build ./public/build
 
-# Install Node dependencies and build assets
-RUN npm install && npm run build
+# Create a .env so artisan commands don't fail during build
+# (real values come from Render environment variables at runtime)
+RUN cp .env.example .env 2>/dev/null || echo "APP_KEY=" > .env
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Run composer post-install hooks
+RUN composer run-script post-autoload-dump --no-interaction 2>/dev/null || true
 
-# Configure Apache to serve from public/
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
-    && echo '<Directory /var/www/html/public>\n    AllowOverride All\n    Require all granted\n</Directory>' >> /etc/apache2/sites-available/000-default.conf \
-    && a2enmod rewrite
+# Ensure storage and cache dirs exist with correct permissions
+RUN mkdir -p storage/framework/{sessions,views,cache/data} \
+             storage/logs \
+             storage/app/public \
+             bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 storage bootstrap/cache
 
-# Copy entrypoint script
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# Copy runtime config files
+COPY docker/nginx.conf      /etc/nginx/nginx.conf
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/php.ini         /usr/local/etc/php/conf.d/custom.ini
+COPY docker/start.sh        /start.sh
+RUN chmod +x /start.sh
 
-EXPOSE 80
+# Render free tier uses port 10000 by default
+# (nginx.conf listens on PORT env var; defaults to 10000)
+EXPOSE 10000
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["/start.sh"]

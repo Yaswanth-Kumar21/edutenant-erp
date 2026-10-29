@@ -8,9 +8,59 @@
         <h1 class="page-title"><i class="fa-solid fa-calendar-xmark me-2" style="color:#d97706;"></i>Leave Requests</h1>
         <p class="mb-0" style="color:var(--muted);font-size:.875rem;">Manage staff leave applications</p>
     </div>
-    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addLeaveModal">
+    <button class="btn btn-primary btn-sm" onclick="toggleLeaveForm()" id="newLeaveBtn">
         <i class="fa-solid fa-plus me-1"></i> New Leave Request
     </button>
+</div>
+
+{{-- Inline Add Leave Form (shown/hidden via JS) --}}
+<div id="addLeaveForm" style="display:none;" class="card mb-4">
+    <div class="card-header" style="background:rgba(79,70,229,.05);border-bottom:1px solid rgba(79,70,229,.15);">
+        <span style="font-weight:600;color:#4f46e5;"><i class="fa-solid fa-calendar-plus me-2"></i>New Leave Request</span>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="toggleLeaveForm()">✕ Cancel</button>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ route('admin.staff.leaves.store') }}">
+            @csrf
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Staff Member <span class="text-danger">*</span></label>
+                    <select name="staff_id" class="form-select" required>
+                        <option value="">Select Staff</option>
+                        @foreach($staffList as $member)
+                            <option value="{{ $member->id }}">{{ $member->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Leave Type <span class="text-danger">*</span></label>
+                    <select name="leave_type" class="form-select" required>
+                        @foreach(\App\Models\LeaveRequest::LEAVE_TYPES as $key => $label)
+                            <option value="{{ $key }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">From Date <span class="text-danger">*</span></label>
+                    <input type="date" name="from_date" class="form-control" required value="{{ now()->format('Y-m-d') }}">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">To Date <span class="text-danger">*</span></label>
+                    <input type="date" name="to_date" class="form-control" required value="{{ now()->format('Y-m-d') }}">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Reason <span class="text-danger">*</span></label>
+                    <textarea name="reason" class="form-control" rows="2" required placeholder="Reason for leave..."></textarea>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-paper-plane me-1"></i> Submit Request
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary ms-2" onclick="toggleLeaveForm()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 {{-- Filters --}}
@@ -110,20 +160,26 @@
                         <td class="text-end">
                             @if($leave->isPending())
                             <div class="d-flex gap-1 justify-content-end">
+                                {{-- Approve --}}
                                 <form method="POST" action="{{ route('admin.staff.leaves.approve', $leave) }}">
                                     @csrf @method('PATCH')
                                     <button type="submit" class="btn btn-sm btn-outline-success"
                                             style="padding:.2rem .5rem;" title="Approve">
-                                        <i class="fa-solid fa-check" style="font-size:.75rem;"></i>
+                                        <i class="fa-solid fa-check" style="font-size:.75rem;"></i> Approve
                                     </button>
                                 </form>
-                                <button type="button" class="btn btn-sm btn-outline-danger"
-                                        style="padding:.2rem .5rem;" title="Reject"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#rejectModal"
-                                        data-leave="{{ $leave->id }}">
-                                    <i class="fa-solid fa-xmark" style="font-size:.75rem;"></i>
-                                </button>
+                                {{-- Reject — inline form with hidden input --}}
+                                <form method="POST"
+                                      action="{{ route('admin.staff.leaves.reject', $leave) }}"
+                                      id="reject-form-{{ $leave->id }}"
+                                      onsubmit="return confirmReject(this, '{{ $leave->id }}')">
+                                    @csrf @method('PATCH')
+                                    <input type="hidden" name="rejection_reason" id="reject-reason-{{ $leave->id }}" value="">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            style="padding:.2rem .5rem;" title="Reject">
+                                        <i class="fa-solid fa-xmark" style="font-size:.75rem;"></i> Reject
+                                    </button>
+                                </form>
                             </div>
                             @endif
                         </td>

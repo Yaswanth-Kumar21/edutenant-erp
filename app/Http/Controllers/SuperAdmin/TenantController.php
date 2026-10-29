@@ -4,7 +4,6 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ImpersonationLog;
-use App\Models\PasswordHistory;
 use App\Models\Role;
 use App\Models\Tenant;
 use App\Models\User;
@@ -203,12 +202,6 @@ class TenantController extends Controller
         return redirect()->route('super.tenants.index')->with('success', "'{$name}' has been deleted.");
     }
 
-    public function switchTenant(Request $request, Tenant $tenant)
-    {
-        session(['tenant_id' => $tenant->id]);
-        return redirect()->route('dashboard')->with('info', "Switched to {$tenant->name}");
-    }
-
     /**
      * Impersonate a College Admin — "Login As College Admin".
      * Stores the original super admin session and logs the action.
@@ -326,22 +319,4 @@ class TenantController extends Controller
         );
     }
 
-    /**
-     * Show credential history for a tenant (Super Admin only).
-     */
-    public function credentialHistory(Tenant $tenant)
-    {
-        $adminRole    = Role::where('name', Role::COLLEGE_ADMIN)->firstOrFail();
-        $collegeAdmin = User::where('tenant_id', $tenant->id)
-                            ->where('role_id', $adminRole->id)
-                            ->first();
-
-        $histories = $collegeAdmin
-            ? PasswordHistory::where('user_id', $collegeAdmin->id)
-                ->latest()
-                ->paginate(20)
-            : collect();
-
-        return view('super-admin.tenants.credential-history', compact('tenant', 'collegeAdmin', 'histories'));
-    }
 }

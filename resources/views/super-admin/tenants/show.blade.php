@@ -349,19 +349,6 @@
                 </form>
                 @endif
 
-                {{-- Credential History --}}
-                <a href="{{ route('super.tenants.credential-history', $tenant) }}" class="btn-secondary w-100" style="justify-content:center;">
-                    <i class="fa-solid fa-clock-rotate-left"></i> Credential History
-                </a>
-
-                {{-- Switch Tenant --}}
-                <form method="POST" action="{{ route('super.tenants.switch', $tenant) }}">
-                    @csrf
-                    <button type="submit" class="btn-secondary w-100" style="justify-content:center;">
-                        <i class="fa-solid fa-right-left"></i> Switch to This Tenant
-                    </button>
-                </form>
-
                 {{-- Delete --}}
                 <form id="del-tenant" method="POST" action="{{ route('super.tenants.destroy', $tenant) }}">@csrf @method('DELETE')</form>
                 <button type="button" class="btn-danger w-100" style="justify-content:center;" data-confirm-delete="del-tenant" data-name="{{ $tenant->name }}">

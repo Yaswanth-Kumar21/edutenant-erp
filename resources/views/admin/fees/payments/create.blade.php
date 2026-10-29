@@ -63,11 +63,11 @@
                             <select name="student_id" id="student_id"
                                     class="form-select @error('student_id') is-invalid @enderror"
                                     required onchange="loadStudentInfo(this.value)">
-                                <option value="">� Search and select student �</option>
+                                <option value=""> Search and select student </option>
                                 @foreach($students as $s)
                                     <option value="{{ $s->id }}"
                                         {{ (old('student_id') == $s->id || ($student && $student->id == $s->id)) ? 'selected' : '' }}>
-                                        {{ $s->admission_number }} � {{ $s->first_name }} {{ $s->last_name }}
+                                        {{ $s->admission_number }}  {{ $s->first_name }} {{ $s->last_name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -111,7 +111,7 @@
                             <select name="fee_type_id" id="fee_type_id"
                                     class="form-select @error('fee_type_id') is-invalid @enderror"
                                     required onchange="updateAmountDue(this)">
-                                <option value="">� Select Fee Type �</option>
+                                <option value=""> Select Fee Type </option>
                                 @foreach($feeTypes as $ft)
                                     <option value="{{ $ft->id }}"
                                             data-amount="{{ $ft->amount }}"
@@ -127,7 +127,7 @@
                             <label class="form-label">Academic Year <span class="text-danger">*</span></label>
                             <select name="academic_year_id"
                                     class="form-select @error('academic_year_id') is-invalid @enderror" required>
-                                <option value="">� Select Year �</option>
+                                <option value=""> Select Year </option>
                                 @foreach($academicYears as $yr)
                                     <option value="{{ $yr->id }}"
                                         {{ (old('academic_year_id') == $yr->id || (!old('academic_year_id') && $yr->is_current)) ? 'selected' : '' }}>
@@ -149,7 +149,7 @@
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Amount Due (?) <span class="text-danger">*</span></label>
+                            <label class="form-label">Amount Due (₹) <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">&#8377;</span>
                                 <input type="number" name="amount_due" id="amount_due"
@@ -160,7 +160,7 @@
                             @error('amount_due')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Discount (?)</label>
+                            <label class="form-label">Discount (₹)</label>
                             <div class="input-group">
                                 <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">&#8377;</span>
                                 <input type="number" name="discount" id="discount"
@@ -169,7 +169,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Fine / Late Fee (?)</label>
+                            <label class="form-label">Fine / Late Fee (₹)</label>
                             <div class="input-group">
                                 <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">&#8377;</span>
                                 <input type="number" name="fine" id="fine"
@@ -178,7 +178,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Amount Paid (?) <span class="text-danger">*</span></label>
+                            <label class="form-label">Amount Paid (₹) <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text" style="background:var(--bg);border-color:var(--border);">&#8377;</span>
                                 <input type="number" name="amount_paid" id="amount_paid"
@@ -307,7 +307,7 @@
 @push('scripts')
 <script>
 (function () {
-    const fmt = v => '?' + parseFloat(v || 0).toLocaleString('en-IN', {minimumFractionDigits: 0});
+    const fmt = v => '₹' + parseFloat(v || 0).toLocaleString('en-IN', {minimumFractionDigits: 0});
 
     window.recalculate = function () {
         const due      = parseFloat(document.getElementById('amount_due').value)  || 0;
@@ -378,7 +378,7 @@
         // Simple display from select option text
         const sel  = document.getElementById('student_id');
         const text = sel.options[sel.selectedIndex].text;
-        const parts = text.split(' � ');
+        const parts = text.split('  ');
         document.getElementById('student-name').textContent = parts[1] || text;
         document.getElementById('student-meta').textContent = parts[0] || '';
         document.getElementById('student-avatar').textContent = (parts[1] || 'S').charAt(0).toUpperCase();

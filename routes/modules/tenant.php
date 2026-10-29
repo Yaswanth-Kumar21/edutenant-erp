@@ -26,10 +26,6 @@ Route::middleware(['role:super_admin'])
         Route::post('tenants/{tenant}/admin/{user}/reset-password', [TenantUserController::class, 'resetPassword'])
             ->name('tenants.admin.reset-password');
 
-        // ── Credential History ────────────────────────────────────────────────
-        Route::get('tenants/{tenant}/credential-history', [TenantController::class, 'credentialHistory'])
-            ->name('tenants.credential-history');
-
         // ── Resend Credentials Email ──────────────────────────────────────────
         Route::post('tenants/{tenant}/resend-credentials', [TenantController::class, 'resendCredentials'])
             ->name('tenants.resend-credentials');
@@ -40,9 +36,6 @@ Route::middleware(['role:super_admin'])
 
         // ── Institution CRUD (resource defined AFTER specific routes) ─────────
         Route::resource('tenants', TenantController::class);
-
-        Route::post('tenants/{tenant}/switch', [TenantController::class, 'switchTenant'])
-            ->name('tenants.switch');
     });
 
 // ── Stop Impersonating (accessible while impersonating, no super_admin role check) ──

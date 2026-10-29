@@ -239,13 +239,17 @@
                             @foreach($recentPayments as $payment)
                             <tr>
                                 <td>
+                                    @if($payment->student)
                                     <a href="{{ route('admin.students.show', $payment->student) }}"
                                        style="color:var(--text);text-decoration:none;font-weight:500;">
-                                        {{ $payment->student?->full_name ?? '—' }}
+                                        {{ $payment->student->full_name }}
                                     </a>
                                     <div style="font-size:0.72rem;color:var(--muted);">
-                                        {{ $payment->student?->admission_number }}
+                                        {{ $payment->student->admission_number }}
                                     </div>
+                                    @else
+                                    <span style="color:var(--muted);">—</span>
+                                    @endif
                                 </td>
                                 <td>{{ $payment->feeType?->name ?? '—' }}</td>
                                 <td style="font-weight:700;color:#059669;">
