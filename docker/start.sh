@@ -20,22 +20,25 @@ else
     echo "[1/6] APP_KEY is set. OK."
 fi
 
-# ── 2. Wait for MySQL to be ready ────────────────────────────────────────────
+# ── 2. Wait for PostgreSQL to be ready ───────────────────────────────────────
 echo "[2/6] Waiting for database..."
 MAX=30
 N=0
 until php -r "
-    \$h = getenv('DB_HOST');   \$p = getenv('DB_PORT') ?: 3306;
-    \$u = getenv('DB_USERNAME'); \$pw = getenv('DB_PASSWORD');
+    \$h  = getenv('DB_HOST');
+    \$p  = getenv('DB_PORT') ?: 5432;
+    \$u  = getenv('DB_USERNAME');
+    \$pw = getenv('DB_PASSWORD');
     \$db = getenv('DB_DATABASE');
     try {
-        new PDO(\"mysql:host=\$h;port=\$p;dbname=\$db\", \$u, \$pw, [PDO::ATTR_TIMEOUT=>3]);
+        new PDO(\"pgsql:host=\$h;port=\$p;dbname=\$db\", \$u, \$pw,
+            [PDO::ATTR_TIMEOUT => 3]);
         exit(0);
-    } catch(Exception \$e){ exit(1); }
+    } catch (Exception \$e) { exit(1); }
 " 2>/dev/null; do
     N=$((N+1))
-    [ \$N -ge \$MAX ] && echo "ERROR: DB unreachable after \$MAX tries." && exit 1
-    echo "  DB not ready (attempt \$N/\$MAX)..."
+    [ $N -ge $MAX ] && echo "ERROR: DB unreachable after $MAX tries." && exit 1
+    echo "  DB not ready (attempt $N/$MAX)..."
     sleep 3
 done
 echo "[2/6] Database connected. OK."
@@ -47,7 +50,8 @@ echo "[3/6] Migrations done. OK."
 
 # ── 4. Seed on first deploy ──────────────────────────────────────────────────
 echo "[4/6] Checking seed status..."
-COUNT=$(php artisan tinker --execute="echo \App\Models\Tenant::count();" 2>/dev/null | grep -E '^[0-9]+$' | tail -1)
+COUNT=$(php artisan tinker --execute="echo \App\Models\Tenant::count();" 2>/dev/null \
+        | grep -E '^[0-9]+$' | tail -1)
 COUNT=${COUNT:-0}
 if [ "$COUNT" = "0" ]; then
     echo "[4/6] First deploy — seeding demo data..."
@@ -74,6 +78,6 @@ echo "[6/6] Done. OK."
 
 echo "========================================"
 echo "  Starting Nginx + PHP-FPM + Queue Worker"
-echo "  Listening on port $NGINX_PORT"
+echo "  Port: $NGINX_PORT"
 echo "========================================"
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
