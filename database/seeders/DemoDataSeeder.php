@@ -503,7 +503,7 @@ class DemoDataSeeder extends Seeder
                 'fee_type_id' => $feeTypes['UNIFORM']->id, 'academic_year_id' => $ay->id,
                 'collected_by' => $adminUser->id, 'receipt_number' => $base . 'A',
                 'amount_due' => 1500, 'amount_paid' => 1500, 'discount' => 0, 'fine' => 0,
-                'payment_mode' => ['cash','upi','card'][rand(0,2)],
+                'payment_mode' => ['cash','upi','online'][rand(0,2)],
                 'payment_date' => Carbon::now()->subDays(rand(5, 90))->toDateString(),
                 'status' => 'paid', 'is_exempted' => false,
             ]

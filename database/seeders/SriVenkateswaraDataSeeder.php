@@ -175,7 +175,7 @@ class SriVenkateswaraDataSeeder extends Seeder
                     'amount_paid'      => 1500,
                     'discount'         => 0,
                     'fine'             => 0,
-                    'payment_mode'     => ['cash', 'upi', 'card'][rand(0, 2)],
+                    'payment_mode'     => ['cash', 'upi', 'online'][rand(0, 2)],
                     'payment_date'     => Carbon::now()->subDays(rand(5, 90))->toDateString(),
                     'status'           => 'paid',
                     'is_exempted'      => false,
